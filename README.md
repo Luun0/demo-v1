@@ -55,7 +55,7 @@ Status on 25 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57 and SSP-5
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
-| Trivy image scan | **Not run** | No verified CI scan result yet |
+| Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242105118 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242105118) |
 | ZAP baseline | **Not run** | No verified nightly scan result yet |
 | Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
 | Password reset | **Implemented** | `TestPasswordResetUniformResponseSingleUseAndExpiry`; web request/confirm pages |
