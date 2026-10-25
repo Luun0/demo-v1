@@ -2,7 +2,7 @@
 
 A privacy-conscious web platform for coordinating support sessions and sharing development observations between a child's parents/guardians and assigned specialists.
 
-> **Status: university MVP prototype (25 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and locally verified as described below. Password reset, field-level encryption, container security scans and usability evaluation remain open. Submission tag: `pre-defense-1`.
+> **Status: university MVP prototype (25 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and locally verified as described below. `pre-defense-1` is the baseline submission tag; these follow-up changes are not included in that tag. Field-level encryption, container security scans and usability evaluation remain open.
 
 - **Repository:** https://github.com/AknurOE/sen-support-platform
 - **YouTrack project:** https://honchikon1.youtrack.cloud/projects/SSP
@@ -46,7 +46,7 @@ Full objectives and success criteria: [docs/proposal.md](docs/proposal.md).
 
 ## Current status
 
-Status on 25 October 2026 (branches SSP-50…SSP-56). Every "done" row links to the command that proves it; see [verification-plan §11](docs/verification-plan.md#11-results--25-october-2026-ssp-56).
+Status on 25 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57 and SSP-58). Every "done" row links to the command or test that proves it; see [verification-plan §11](docs/verification-plan.md#11-results--25-october-2026-ssp-58).
 
 | Area | State | Evidence |
 |---|---|---|
@@ -58,7 +58,8 @@ Status on 25 October 2026 (branches SSP-50…SSP-56). Every "done" row links to 
 | Trivy image scan | **Not run** | No verified CI scan result yet |
 | ZAP baseline | **Not run** | No verified nightly scan result yet |
 | Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
-| Password reset and field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
+| Password reset | **Implemented** | `TestPasswordResetUniformResponseSingleUseAndExpiry`; web request/confirm pages |
+| Field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
 | Audit-table DB-role hardening | **Implemented** | `TestApplicationRoleCannotTamperWithAuditRows`; runtime API uses `ssp_app`, which has no UPDATE/DELETE privilege |
 | Parent-owned diary-entry deletion | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint`, `TestDiaryDeletionOwnerOnlyAndAudited` |
 | Audit retention | **Implemented as an operator-run command** (365 days default; configurable) | `api retention`; `TestRetentionDeletesOnlyExpiredAuditEvents` |
@@ -184,7 +185,8 @@ Shared: literature review, system comparison, README and consistency review. Mil
 
 - Rate limiting is in-memory per instance; a shared store is needed for more than one API replica.
 - Docker images, compose and nginx were built and started locally with synthetic credentials in an isolated Compose project. Trivy and ZAP scans remain unverified.
-- Not implemented (documented as planned): password reset and field-level encryption.
+- Not implemented (documented as planned): field-level encryption.
+- Password reset uses a one-hour, single-use token stored only as a hash. Local Compose mode writes active reset links to API logs when `PASSWORD_RESET_LOG_LINK=true`; view them with `docker compose logs api` and treat those logs as credentials. Set the flag to `false` outside local development until a mail delivery provider is configured. This log mode requires `COOKIE_SECURE=false`.
 - Audit retention runs when an operator or scheduler invokes `api retention`; default age is 365 days (`AUDIT_RETENTION_DAYS`).
 - Consent is a single recorded checkbox with a policy version — legal adequacy is an open question for the university lawyer (SF-11).
 - Usability testing with 5 users and interviews have not been conducted.
@@ -223,3 +225,4 @@ The authors have not approved an open-source license. The repository remains all
 | 4 Frontend | SSP-54-frontend-fsd | Implemented; FSD client on the real API, ADR-0009 |
 | 5 QA/DevOps | SSP-55-qa-devops | CI and container configuration implemented; image/Trivy/ZAP execution not yet verified |
 | 6 Docs | SSP-56-docs | Implemented; traceability and local verification results documented |
+| 7 Follow-up gaps | SSP-57, SSP-58 | Password reset and owner-only diary delete UI implemented; rate-limit store and external mail delivery remain out of scope |
