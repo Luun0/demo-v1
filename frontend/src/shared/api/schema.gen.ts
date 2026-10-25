@@ -436,7 +436,11 @@ export interface paths {
          */
         put: operations["putChildrenChildIdDiaryEntriesEntryId"];
         post?: never;
-        delete?: never;
+        /**
+         * Delete an authored parent diary entry
+         * @description Parents may delete only their own entries. Specialists' observations are retained. The action is audited.
+         */
+        delete: operations["deleteChildrenChildIdDiaryEntriesEntryId"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1750,6 +1754,31 @@ export interface operations {
             404: components["responses"]["NotFound"];
             413: components["responses"]["PayloadTooLarge"];
             422: components["responses"]["InvalidData"];
+            429: components["responses"]["TooManyRequests"];
+        };
+    };
+    deleteChildrenChildIdDiaryEntriesEntryId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                childId: components["parameters"]["ChildId"];
+                entryId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry deleted. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
             429: components["responses"]["TooManyRequests"];
         };
     };

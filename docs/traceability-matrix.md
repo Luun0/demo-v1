@@ -151,11 +151,11 @@ The Go domain model and HTTP response DTOs now represent the following requireme
 | PRV-03a | Open | Field-level encryption not implemented (MVP assumption, ADR-0007) |
 | PRV-04 | Verified (local) | TestLogsContainNoPII, TestRedactsSensitiveKeys |
 | PRV-05 | Verified (local) | TestSpecialistsOnlyNeverReachesParent (export), TestDeleteChildAndAdminFlows |
-| PRV-06 | Open | Retention job not implemented; 365 days assumed (ADR-0005) |
+| PRV-06 | Implemented | `api retention` uses configurable 365-day default; `TestRetentionDeletesOnlyExpiredAuditEvents` |
 | PRV-07 | Implemented | Consent recorded at child creation (ADR-0007); single checkbox — open question |
 | PRV-08 | Verified (local) | TestSeedIsSyntheticAndIdempotent |
 | AUD-01 | Verified (local) | TestEveryEditCreatesVersionAndExactlyOneAuditEvent; denied actions audited (TestCrossFamilyIDOR…) |
-| AUD-02 | Partial | No update/delete endpoint (TestRoutesMatchOpenAPI); DB-role REVOKE not yet applied |
+| AUD-02 | Implemented | No audit mutation endpoint; `ssp_app` lacks UPDATE/DELETE on audit rows (`TestApplicationRoleCannotTamperWithAuditRows`) |
 | AUD-03 | Verified (local) | TestEveryEditCreatesVersionAndExactlyOneAuditEvent |
 | AUD-04 | Verified (local) | TestRolePermissionsWithinRelationship; e2e parent access log |
 | AUD-05 | Partial | login/refresh/reuse/logout audited (TestRefreshRotationReuseDetectionAndLogout); password change not in MVP |

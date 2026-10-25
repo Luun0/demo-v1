@@ -29,7 +29,7 @@ func TestLoadDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if c.AccessTTL.Minutes() != 15 || !c.CookieSecure || len(c.AllowedOrigins) != 2 || c.MaxBodyBytes != 65536 {
+	if c.AccessTTL.Minutes() != 15 || !c.CookieSecure || len(c.AllowedOrigins) != 2 || c.MaxBodyBytes != 65536 || c.AuditRetentionDays != 365 || !c.AutoMigrate {
 		t.Fatalf("%+v", c)
 	}
 }

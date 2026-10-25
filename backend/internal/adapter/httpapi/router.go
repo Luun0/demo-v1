@@ -132,6 +132,7 @@ func (a *API) routes() []route {
 		{"GET", c + "/diary-entries", a.listEntries, true},
 		{"POST", c + "/diary-entries", a.createEntry, true},
 		{"PUT", c + "/diary-entries/{entryId}", a.editEntry, true},
+		{"DELETE", c + "/diary-entries/{entryId}", a.deleteEntry, true},
 		{"GET", c + "/diary-entries/{entryId}/versions", a.listVersions, true},
 		{"GET", c + "/audit-events", a.childAudit, true},
 		{"POST", c + "/exports", a.export, true},

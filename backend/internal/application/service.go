@@ -13,9 +13,20 @@ import (
 
 // Config holds use-case tunables.
 type Config struct {
-	RefreshTTL      time.Duration
-	MaxFailedLogins int
-	LockoutDuration time.Duration
+	RefreshTTL         time.Duration
+	MaxFailedLogins    int
+	LockoutDuration    time.Duration
+	AuditRetentionDays int
+}
+
+// RunRetention removes audit events older than the configured retention period.
+func (s *Service) RunRetention(ctx context.Context) (int64, error) {
+	days := s.cfg.AuditRetentionDays
+	if days <= 0 {
+		days = 365
+	}
+	cutoff := s.now().AddDate(0, 0, -days)
+	return s.uow.Repo().DeleteAuditBefore(ctx, cutoff)
 }
 
 // Service implements all use cases.

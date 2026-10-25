@@ -194,6 +194,18 @@ func (a *API) editEntry(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, toEntry(e))
 }
 
+func (a *API) deleteEntry(w http.ResponseWriter, r *http.Request) {
+	ids, err := pathIDs(r, "childId", "entryId")
+	if err == nil {
+		err = a.svc.DeleteEntry(r.Context(), actorFrom(r.Context()), ids[0], ids[1])
+	}
+	if err != nil {
+		fail(w, r, a.log, err)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (a *API) listVersions(w http.ResponseWriter, r *http.Request) {
 	ids, err := pathIDs(r, "childId", "entryId")
 	if err != nil {
