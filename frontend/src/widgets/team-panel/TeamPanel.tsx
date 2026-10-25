@@ -21,7 +21,7 @@ export function TeamPanel({ childId, viewer }: { childId: string; viewer: User }
         <h2 id="guardians-h" className="mb-3 text-lg font-semibold">{t('guardians')}</h2>
         <ul className="space-y-2">
           {guardians.map((g) => (
-            <li key={g.user_id} className="flex items-center gap-3 rounded-lg border border-line bg-surface p-3">
+            <li key={g.user_id} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-3 shadow-soft">
               {g.first_name} {g.last_name} {g.is_primary && <Badge tone="brand">{t('primary')}</Badge>}
             </li>
           ))}
@@ -34,7 +34,7 @@ export function TeamPanel({ childId, viewer }: { childId: string; viewer: User }
             {specialists.map((s) => {
               const isActive = active.includes(s)
               return (
-                <li key={s.user_id} className="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-surface p-3">
+                <li key={s.user_id} className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-surface p-3 shadow-soft">
                   <span className="font-medium">{s.first_name} {s.last_name}</span>
                   <span className="text-sm text-ink-soft">
                     {s.assigned_at && t('assigned', { date: formatDate(s.assigned_at, i18n.language) })}

@@ -12,7 +12,7 @@ export function AdminUsersPage() {
     <>
       <PageHeader title={t('usersTitle')} actions={<CreateUserDialog />} />
       {q.isPending ? <Loading /> : q.isError ? <ErrorState error={q.error} onRetry={() => void q.refetch()} /> : (
-        <div className="overflow-x-auto rounded-xl border border-line bg-surface">
+        <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-soft">
           <table className="w-full text-left text-sm">
             <caption className="sr-only">{t('usersTitle')}</caption>
             <thead className="border-b border-line bg-muted">

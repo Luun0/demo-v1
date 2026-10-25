@@ -4,12 +4,12 @@ import type { SupportSession } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { Badge } from '@/shared/ui'
 
-const tone = { scheduled: 'brand', completed: 'neutral', cancelled: 'warn' } as const
+const tone = { scheduled: 'success', completed: 'neutral', cancelled: 'danger' } as const
 
 export function SessionRow({ session, actions }: { session: SupportSession; actions?: ReactNode }) {
   const { t, i18n } = useTranslation('schedule')
   return (
-    <li className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4">
+    <li className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-4 shadow-soft">
       <div>
         <p className="font-semibold text-ink">{session.title}</p>
         <p className="text-ink-soft">

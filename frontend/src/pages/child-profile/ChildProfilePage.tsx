@@ -22,7 +22,7 @@ export function ChildProfilePage() {
     <>
       <PageHeader title={t('profileTitle')} />
       <ChildHeader childId={childId} role={me.role} />
-      <dl className="grid gap-4 rounded-xl border border-line bg-surface p-5 sm:grid-cols-2">
+      <dl className="grid gap-4 rounded-2xl border border-line bg-surface p-5 shadow-soft sm:grid-cols-2">
         <div><dt className="text-sm text-ink-soft">{t('name')}</dt><dd className="font-medium">{c.first_name} {c.last_name}</dd></div>
         <div><dt className="text-sm text-ink-soft">{t('birthDate')}</dt><dd className="font-medium">{formatDate(c.birth_date, i18n.language)}</dd></div>
       </dl>

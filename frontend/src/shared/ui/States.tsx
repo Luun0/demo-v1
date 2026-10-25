@@ -38,8 +38,14 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
   )
 }
 
-export function Badge({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'brand' | 'warn' | 'danger' }) {
-  const tones = { neutral: 'bg-muted text-ink', brand: 'bg-brand/15 text-brand-strong', warn: 'bg-warn/20 text-ink', danger: 'bg-danger/15 text-danger' }
+type BadgeTone = 'neutral' | 'brand' | 'warn' | 'danger' | 'success' | 'accent'
+
+export function Badge({ children, tone = 'neutral' }: { children: ReactNode; tone?: BadgeTone }) {
+  const tones: Record<BadgeTone, string> = {
+    neutral: 'bg-muted text-ink', brand: 'bg-brand/15 text-brand-strong',
+    warn: 'bg-warn/20 text-ink', danger: 'bg-danger/15 text-danger',
+    success: 'bg-brand text-white', accent: 'bg-accent/15 text-ink',
+  }
   return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-medium ${tones[tone]}`}>{children}</span>
 }
 
