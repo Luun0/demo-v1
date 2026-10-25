@@ -17,6 +17,7 @@ type Config struct {
 	MaxFailedLogins    int
 	LockoutDuration    time.Duration
 	AuditRetentionDays int
+	PasswordResetTTL   time.Duration
 }
 
 // RunRetention removes audit events older than the configured retention period.

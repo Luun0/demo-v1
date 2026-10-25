@@ -40,6 +40,10 @@ type Repo interface {
 	MarkRefreshRotated(ctx context.Context, id uuid.UUID, at time.Time) error
 	RevokeRefreshFamily(ctx context.Context, family uuid.UUID, at time.Time) error
 	RevokeUserRefreshTokens(ctx context.Context, user uuid.UUID, at time.Time) error
+	InsertPasswordResetToken(ctx context.Context, t *domain.PasswordResetToken) error
+	PasswordResetTokenByHash(ctx context.Context, hash []byte) (domain.PasswordResetToken, error)
+	MarkPasswordResetUsed(ctx context.Context, id uuid.UUID, at time.Time) error
+	RevokePasswordResetTokens(ctx context.Context, user uuid.UUID, at time.Time) error
 
 	CreateChild(ctx context.Context, c *domain.Child) error
 	ChildByID(ctx context.Context, id uuid.UUID) (domain.Child, error)

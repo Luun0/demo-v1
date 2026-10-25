@@ -4,6 +4,8 @@ import { Loading } from '@/shared/ui'
 import { AppShell } from '@/widgets/app-shell'
 import { LandingPage } from '@/pages/landing'
 import { LoginPage } from '@/pages/login'
+import { ForgotPasswordPage } from '@/pages/forgot-password'
+import { ResetPasswordPage } from '@/pages/reset-password'
 import { NotFoundPage } from '@/pages/not-found'
 import { GuestOnly, RequireAuth, RequireRole } from './guards'
 
@@ -18,6 +20,8 @@ function lazyPage<K extends string>(load: () => Promise<Record<K, ComponentType>
 
 export const routes: RouteObject[] = [
   { path: '/', element: <LandingPage /> },
+  { path: '/forgot-password', element: <ForgotPasswordPage /> },
+  { path: '/reset-password', element: <ResetPasswordPage /> },
   {
     element: <GuestOnly />,
     children: [

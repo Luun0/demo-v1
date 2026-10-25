@@ -122,6 +122,17 @@ type RefreshToken struct {
 	CreatedAt time.Time
 }
 
+// PasswordResetToken stores only the hash of a one-time reset credential.
+type PasswordResetToken struct {
+	ID        uuid.UUID
+	UserID    uuid.UUID
+	TokenHash []byte
+	ExpiresAt time.Time
+	UsedAt    *time.Time
+	RevokedAt *time.Time
+	CreatedAt time.Time
+}
+
 // AuditEvent never contains diary text, passwords or tokens (ADR-0005).
 type AuditEvent struct {
 	ID         uuid.UUID

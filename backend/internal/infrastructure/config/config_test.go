@@ -29,7 +29,18 @@ func TestLoadDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if c.AccessTTL.Minutes() != 15 || !c.CookieSecure || len(c.AllowedOrigins) != 2 || c.MaxBodyBytes != 65536 || c.AuditRetentionDays != 365 || !c.AutoMigrate {
+	if c.AccessTTL.Minutes() != 15 || !c.CookieSecure || len(c.AllowedOrigins) != 2 || c.PasswordResetBaseURL != "https://a.test" || c.LogPasswordResetLinks || c.MaxBodyBytes != 65536 || c.AuditRetentionDays != 365 || !c.AutoMigrate {
 		t.Fatalf("%+v", c)
+	}
+}
+
+func TestResetLinkLoggingRequiresInsecureDevelopmentCookies(t *testing.T) {
+	base := map[string]string{"DATABASE_URL": "postgres://x", "JWT_SECRET": strings.Repeat("a", 32), "PASSWORD_RESET_LOG_LINK": "true"}
+	if _, err := Load(env(base)); err == nil || !strings.Contains(err.Error(), "COOKIE_SECURE=false") {
+		t.Fatalf("expected unsafe reset logging to be rejected, got %v", err)
+	}
+	base["COOKIE_SECURE"] = "false"
+	if c, err := Load(env(base)); err != nil || !c.LogPasswordResetLinks {
+		t.Fatalf("development reset-link logging should be enabled: %+v, %v", c, err)
 	}
 }

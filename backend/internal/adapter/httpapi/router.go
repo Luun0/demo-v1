@@ -15,10 +15,12 @@ var errUnauthorized = domain.ErrUnauthorized
 
 // Config holds HTTP-level settings.
 type Config struct {
-	AllowedOrigins []string
-	MaxBodyBytes   int64
-	CookieSecure   bool
-	RefreshTTL     time.Duration
+	AllowedOrigins        []string
+	MaxBodyBytes          int64
+	CookieSecure          bool
+	RefreshTTL            time.Duration
+	PasswordResetBaseURL  string
+	LogPasswordResetLinks bool
 }
 
 // API is the HTTP adapter.
@@ -111,6 +113,8 @@ func (a *API) routes() []route {
 		{"GET", v + "/readyz", a.readyz, false},
 		{"POST", v + "/auth/register", a.register, false},
 		{"POST", v + "/auth/login", a.login, false},
+		{"POST", v + "/auth/password-reset/request", a.requestPasswordReset, false},
+		{"POST", v + "/auth/password-reset/confirm", a.confirmPasswordReset, false},
 		{"POST", v + "/auth/refresh", a.csrf(a.refresh), false},
 		{"POST", v + "/auth/logout", a.csrf(a.logout), false},
 		{"GET", v + "/auth/me", a.me, true},
