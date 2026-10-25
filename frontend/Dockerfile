@@ -6,7 +6,11 @@ RUN npm ci --ignore-scripts
 COPY . .
 RUN npm run build && npm run size:bundle
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.30.6-alpine3.24
+# Refresh Alpine packages so the runtime image includes current security fixes.
+USER root
+RUN apk upgrade --no-cache
+USER 101
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY --from=deploy nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
