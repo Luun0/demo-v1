@@ -2,7 +2,7 @@
 
 **Project:** SEN Support Platform
 **Owner:** Ondasyn Aknur (SE-2420), Security, Privacy & Quality Assurance
-**Status:** Draft for pre-defense 1 (24 October), revision 2
+**Status:** Verification plan for the implemented university MVP prototype (25 October 2026), revision 3. Planned features and evaluations remain open as identified below.
 
 ## 1. Aim of verification
 
@@ -108,22 +108,27 @@ The project aim is to show that the platform gives measurably better protection 
 
 ## 11. Results — 25 October 2026 (SSP-56)
 
-Measured on the development box (local PostgreSQL 17, single API instance, synthetic seed only). Docker was not available there, so container-level checks run only in CI.
+Measured with synthetic data on the development box and isolated containers. The full `make check` wrapper is still blocked by the host's missing Go toolchain; its component gates were run separately.
 
 | Check | Command | Result |
 |---|---|---|
-| Full gate | `make check` | green (lint + typecheck + test + build) |
-| Backend coverage | `backend/scripts/covergate.sh` | total 85.7 %; policy 95.0 %, application 87.8 %, security 94.6 %, httpapi 82.9 % (gates 70/85/85/85/70) |
+| Full gate | `make check` | Not completed on this host: Go and golangci-lint are absent; the backend suite and frontend gates were run separately |
+| Go suite | `docker run … golang:1.26 go test ./...` with temporary PostgreSQL 17 | All Go unit, integration, and contract packages passed |
+| Backend coverage | `backend/scripts/covergate.sh` | Not rerun after these changes; previous baseline was 85.7 % total |
 | Access matrix | `TestAccessMatrix100PercentCells` | every role × relation × action cell asserted |
 | IDOR | `TestCrossFamilyIDORReturns404OnEveryEndpoint` | 404 on all child-scoped endpoints |
 | Frontend unit | `npm test` (Vitest) | 6 files, 15 tests passed |
-| E2E + a11y | `npm run test:e2e` (Playwright + axe, WCAG 2.1 AA tags) | 6/6 passed (guest, parent, specialist, admin, IDOR, mobile drawer); 0 axe violations |
+| E2E + a11y | `VITE_API_PROXY=http://127.0.0.1:18084 make e2e` (Playwright + axe, WCAG 2.1 AA tags) | 6/6 passed (guest, parent, specialist, admin, IDOR, mobile drawer); 0 axe violations in light/dark checks |
 | Lighthouse (mobile preset, `vite preview`) | `npx lighthouse@12` | `/`: perf 91, a11y 100, best-practices 96; `/login`: 90 / 100 / 96; LCP 2.7 s (simulated throttling) |
 | Bundle | `npm run size:bundle` | initial JS 181.8 KB gzip (budget 200 KB) |
 | Load | `k6 run loadtest/k6-diary.js` | 50 VU × 60 s: p95 6.19 ms, 0 % errors, 13 103 requests |
-| Dependencies | `govulncheck`, `npm audit --audit-level=high` | 0 called vulnerabilities; 0 npm vulnerabilities |
+| Dependencies | Go `govulncheck`; `npm audit --audit-level=high` | 0 called Go vulnerabilities (one uncalled module finding); 0 npm vulnerabilities |
 | Secrets | `gitleaks git` / `gitleaks dir` | no leaks (2 expired local test JWTs in history allow-listed in `.gitleaksignore` with reason) |
 | Workflows | `actionlint` | no findings |
-| Trivy, ZAP baseline | CI jobs `images`, `zap-nightly.yml` | **not executed locally** (no Docker on the box) — pending first CI run |
+| Compose images and services | Isolated `docker compose -p sspverifyhard2 --env-file /tmp/demo-v1-verify-hardening2.env up --build -d` | API and web images built; migrations completed; restricted-role API health check passed; synthetic seed succeeded |
+| Audit role permissions | `TestApplicationRoleCannotTamperWithAuditRows` | `ssp_app` cannot UPDATE or DELETE audit rows; retention is through the restricted function |
+| Trivy, ZAP baseline | Image scan and nightly scan | **Not verified** |
 
 The naive baseline comparison (section 5) and the usability test with 5 users (SF-08) are not part of this run and remain open.
+
+The API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, audit-role restrictions, and frontend-on-API are implemented. Password reset, field-level encryption, Trivy/ZAP scans, legal review, and usability testing remain open and must not be reported as completed.

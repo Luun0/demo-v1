@@ -210,7 +210,9 @@ All `datetime` values are stored in UTC. The diagram is a conceptual draft; exac
 | Profile, support-session, diary/version services | Implemented | `backend/internal/application` |
 | Repository interfaces + PostgreSQL | Implemented | `application/ports.go`, `adapter/postgres` |
 | Audit service | Implemented (same transaction; denied actions too) | `application/service.go`, `audit.go` |
-| Retention job, password reset, field-level encryption | Planned | ADR-0005, ADR-0007 |
+| Parent-owned diary-entry deletion | Implemented; audited | `application.Service.DeleteEntry`, `TestDiaryDeletionOwnerOnlyAndAudited` |
+| Audit retention | Implemented as operator-run command; 365 days default | ADR-0005, `api retention` |
+| Password reset, field-level encryption | Planned | ADR-0007 |
 | TLS terminator / hosting | Planned (SF-05) | `deploy/nginx.conf` serves plain HTTP behind it |
 
 Layering is enforced mechanically: depguard (Go) forbids `net/http`/`pgx`/adapters in domain and application; eslint-plugin-boundaries forbids upward and cross-slice imports in the web client.

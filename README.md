@@ -2,7 +2,7 @@
 
 A privacy-conscious web platform for coordinating support sessions and sharing development observations between a child's parents/guardians and assigned specialists.
 
-> **Status: analysis, design and interactive-prototype stage (Pre-Defense 1, 24 October 2026).** The backend API, database integration and business logic are **not implemented yet**. The frontend is a clickable prototype running on sample data. Submission tag: `pre-defense-1`.
+> **Status: university MVP prototype (25 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and locally verified as described below. Password reset, field-level encryption, container security scans and usability evaluation remain open. Submission tag: `pre-defense-1`.
 
 - **Repository:** https://github.com/AknurOE/sen-support-platform
 - **YouTrack project:** https://honchikon1.youtrack.cloud/projects/SSP
@@ -51,13 +51,17 @@ Status on 25 October 2026 (branches SSP-50…SSP-56). Every "done" row links to 
 | Area | State | Evidence |
 |---|---|---|
 | REST API contract (OpenAPI 3.1, problem+json) | **Implemented** | `make contract-lint`; `TestRoutesMatchOpenAPI` keeps routes == contract |
-| Go API: auth (Argon2id, JWT + rotated refresh cookie, CSRF), RBAC + relationship + visibility, children, team, sessions, diary with versions, export/delete, audit | **Implemented** | `make backend-test` — total coverage 85.7 %, policy 95 % |
+| Go API: auth (Argon2id, JWT + rotated refresh cookie, CSRF), RBAC + relationship + visibility, children, team, sessions, versioned diary, export/delete, audit | **Implemented** | Go unit/integration/contract suite; access matrix and IDOR tests |
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
-| Docker images, compose, nginx with CSP | Written, **not verified locally** (no Docker on the dev box) | CI job `images` (build + Trivy) — pending first run |
-| ZAP baseline | Workflow written, **not run** | `.github/workflows/zap-nightly.yml` |
+| Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
+| Trivy image scan | **Not run** | No verified CI scan result yet |
+| ZAP baseline | **Not run** | No verified nightly scan result yet |
 | Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
-| Password reset, retention job, field-level encryption, diary entry deletion | **Planned / open** | [ADR-0005](docs/decisions/ADR-0005-audit-retention.md), [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md), [ADR-0008](docs/decisions/ADR-0008-access-matrix-interpretation.md) |
+| Password reset and field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
+| Audit-table DB-role hardening | **Implemented** | `TestApplicationRoleCannotTamperWithAuditRows`; runtime API uses `ssp_app`, which has no UPDATE/DELETE privilege |
+| Parent-owned diary-entry deletion | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint`, `TestDiaryDeletionOwnerOnlyAndAudited` |
+| Audit retention | **Implemented as an operator-run command** (365 days default; configurable) | `api retention`; `TestRetentionDeletesOnlyExpiredAuditEvents` |
 | Usability study (SF-08), interviews (SF-02) | **Not conducted** | [usability plan](docs/frontend/usability-plan.md) |
 | Legal classification, consent model, hosting | Open questions — **no compliance is claimed** | [legal checklist](docs/kazakhstan-privacy-legal-checklist.md) |
 
@@ -102,7 +106,7 @@ flowchart LR
 ### Full stack in Docker
 
 ```bash
-cp .env.example .env   # replace REPLACE_WITH_* (JWT_SECRET: openssl rand -hex 32)
+cp .env.example .env   # replace example passwords and JWT_SECRET (openssl rand -hex 32)
 make dev               # db (127.0.0.1 only) → migrate → api → web
 make seed              # synthetic demo users and one child (PRV-08)
 open http://localhost:8081
@@ -179,8 +183,9 @@ Shared: literature review, system comparison, README and consistency review. Mil
 ## Known limitations and next steps
 
 - Rate limiting is in-memory per instance; a shared store is needed for more than one API replica.
-- Docker images, Trivy and ZAP are configured but have not yet been executed (no Docker on the development box); the first CI run is the verification.
-- Not implemented (documented as planned): password reset, retention job (365 days assumed), field-level encryption, deleting a single diary entry, DB-role REVOKE on the audit table.
+- Docker images, compose and nginx were built and started locally with synthetic credentials in an isolated Compose project. Trivy and ZAP scans remain unverified.
+- Not implemented (documented as planned): password reset and field-level encryption.
+- Audit retention runs when an operator or scheduler invokes `api retention`; default age is 365 days (`AUDIT_RETENTION_DAYS`).
 - Consent is a single recorded checkbox with a policy version — legal adequacy is an open question for the university lawyer (SF-11).
 - Usability testing with 5 users and interviews have not been conducted.
 - PR review by another team member is a process step the team still has to carry out on GitHub (SF-10).
@@ -206,15 +211,15 @@ Use synthetic data only. Do not commit credentials, real child data or identifia
 
 ## License
 
-All rights reserved by the authors (see [LICENSE](LICENSE); the final licence choice is a TODO for the team).
+The authors have not approved an open-source license. The repository remains all-rights-reserved under the explicit interim decision recorded in [LICENSE](LICENSE); reuse requires written permission.
 
 ## Development status
 
 | Phase | Branch | Result |
 |---|---|---|
-| 0 Repo hygiene | SSP-50-repo-foundation | `make check`, CI, pre-commit, templates, binaries in `docs/assets/` |
-| 1 Contract + ADRs | SSP-51-contract-adrs | OpenAPI v0.2, ADR-0001…0008 |
-| 2–3 Backend | SSP-52-backend-access, SSP-53-backend-diary | Clean Architecture API, access/IDOR tests first |
-| 4 Frontend | SSP-54-frontend-fsd | FSD client on the real API, ADR-0009 |
-| 5 QA/DevOps | SSP-55-qa-devops | Docker, compose, CI e2e/Trivy/ZAP, Playwright + axe |
-| 6 Docs | SSP-56-docs | this README, traceability, verification results |
+| 0 Repo hygiene | SSP-50-repo-foundation | Implemented; `make check` and CI configuration exist |
+| 1 Contract + ADRs | SSP-51-contract-adrs | Implemented; OpenAPI v0.2, ADR-0001…0008 |
+| 2–3 Backend | SSP-52-backend-access, SSP-53-backend-diary | Implemented; Clean Architecture API, access/IDOR tests |
+| 4 Frontend | SSP-54-frontend-fsd | Implemented; FSD client on the real API, ADR-0009 |
+| 5 QA/DevOps | SSP-55-qa-devops | CI and container configuration implemented; image/Trivy/ZAP execution not yet verified |
+| 6 Docs | SSP-56-docs | Implemented; traceability and local verification results documented |
