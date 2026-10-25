@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --color-brand: #0f766e;
+  --color-brand-strong: #115e59;
+  --color-on-brand: #ffffff;
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-ink: #0f172a;
+  --color-ink-soft: #475569;
+  --color-line: #cbd5e1;
+  --color-muted: #f1f5f9;
+  --color-danger: #b91c1c;
+  --color-warn: #92400e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-brand: #2dd4bf;
+    --color-brand-strong: #5eead4;
+    --color-on-brand: #042f2e;
+    --color-canvas: #020617;
+    --color-surface: #0f172a;
+    --color-ink: #f1f5f9;
+    --color-ink-soft: #cbd5e1;
+    --color-line: #334155;
+    --color-muted: #1e293b;
+    --color-danger: #fca5a5;
+    --color-warn: #fcd34d;
+  }
+}
+
+html { font-family: var(--font-sans); font-size: 112.5%; -webkit-text-size-adjust: 100%; }
+body { background: var(--color-canvas); color: var(--color-ink); line-height: 1.6; }
+:focus-visible { outline: 3px solid var(--color-brand); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

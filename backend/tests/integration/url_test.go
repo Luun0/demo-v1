@@ -1,0 +1,16 @@
+package integration
+
+import (
+	"net/http"
+	"net/url"
+)
+
+func mustURL(s string) *url.URL {
+	u, err := url.Parse(s)
+	if err != nil {
+		panic(err)
+	}
+	return u
+}
+
+type httpCookie = http.Cookie
