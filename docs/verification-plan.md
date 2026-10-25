@@ -2,7 +2,7 @@
 
 **Project:** SEN Support Platform
 **Owner:** Ondasyn Aknur (SE-2420), Security, Privacy & Quality Assurance
-**Status:** Verification plan for the university MVP prototype (25 October 2026), revision 4. Password reset and parent-owned diary deletion are now implemented; field-level encryption and evaluations remain open as identified below.
+**Status:** Verification plan for the university MVP prototype (26 October 2026), revision 5. Password reset and parent-owned diary deletion are implemented; Trivy passed in CI; the first ZAP baseline ran with warnings. Field-level encryption, warning triage, and evaluations remain open as identified below.
 
 ## 1. Aim of verification
 
@@ -137,4 +137,18 @@ Measured with synthetic data on the development box and isolated containers. The
 
 The naive baseline comparison (section 5) and the usability test with 5 users (SF-08) are not part of this run and remain open.
 
-The API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, password reset, audit-role restrictions, and frontend-on-API are implemented. Field-level encryption, Trivy/ZAP scans, legal review, and usability testing remain open and must not be reported as completed. In local Compose mode only, reset links are written to API logs; keep that flag off for deployments with real accounts until a mail provider is configured.
+At the time of this 25 October run, the API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, password reset, audit-role restrictions, and frontend-on-API were implemented. Field-level encryption, Trivy/ZAP execution, legal review, and usability testing were still open then. In local Compose mode only, reset links are written to API logs; keep that flag off for deployments with real accounts until a mail provider is configured.
+
+## 12. Follow-up verification (26 October 2026, SSP-61)
+
+The following CI checks use synthetic data. The ZAP workflow was manually dispatched against `main` at commit `062f02d13026fbe75c6af60e622caccec28561df`.
+
+| Check | Result |
+|---|---|
+| `make check` | Passed in the PR #4 quality job; [CI run #40246060377](https://github.com/Luun0/demo-v1/actions/runs/40246060377) completed 3/3 green. |
+| Trivy image scan | Passed for both API and web images, 0 HIGH/CRITICAL findings; [CI run #40242594381](https://github.com/Luun0/demo-v1/actions/runs/40242594381). |
+| ZAP baseline | [Workflow run #40245962871](https://github.com/Luun0/demo-v1/actions/runs/40245962871) completed successfully: 0 FAIL, 5 WARN, 63 PASS. The workflow uses `fail_action: false`, so a successful job does not mean the warnings are resolved. |
+
+ZAP warning categories reported: Information Disclosure - Suspicious Comments (1), Storable and Cacheable Content (8), Permissions Policy Header Not Set (5), Modern Web Application (3), and Cross-Origin-Embedder-Policy Header Missing or Invalid (9). Counts are alert instances/URLs as reported by ZAP. These warnings have not been triaged; this result is not a claim that the application has no security findings. Run and review another baseline before release.
+
+The naive baseline comparison (section 5), usability test with 5 users (SF-08), legal review, and PRV-03a field-level encryption remain open. Shared-store rate limiting is optional and was not implemented; the configured default remains the in-memory limiter.
