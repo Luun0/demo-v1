@@ -1191,10 +1191,9 @@ paths:
     post:
       tags:
       - auth
-      summary: Request a password reset (planned)
-      x-status: planned
-      description: Always 202 regardless of whether the email exists. Email delivery is out of MVP implementation
-        scope (ADR-0007).
+      summary: Request a password reset
+      description: Always 202 with the same response regardless of whether the email exists. In local prototype mode,
+        the one-time reset link is written to API logs; this delivery mode is disabled when COOKIE_SECURE is true.
       security: []
       requestBody:
         required: true
@@ -1212,6 +1211,14 @@ paths:
       responses:
         '202':
           description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+                properties:
+                  message:
+                    type: string
         '422':
           $ref: '#/components/responses/InvalidData'
         '429':
@@ -1223,8 +1230,8 @@ paths:
     post:
       tags:
       - auth
-      summary: Confirm a password reset (planned)
-      x-status: planned
+      summary: Confirm a password reset
+      description: Consumes a single-use token valid for one hour, updates the password and revokes refresh sessions.
       security: []
       requestBody:
         required: true
@@ -1245,7 +1252,7 @@ paths:
                   writeOnly: true
       responses:
         '204':
-          description: Password changed; all sessions revoked.
+          description: Password changed; refresh sessions revoked. Existing short-lived access tokens expire within 15 minutes.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '422':

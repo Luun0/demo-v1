@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 export type IconName =
   | 'home' | 'child' | 'calendar' | 'diary' | 'people' | 'access' | 'shield' | 'exit' | 'flower'
-  | 'arrow' | 'check' | 'chevron' | 'clock' | 'close' | 'eye' | 'lock' | 'menu' | 'minus' | 'notebook' | 'plus' | 'search'
+  | 'arrow' | 'check' | 'chevron' | 'clock' | 'close' | 'eye' | 'lock' | 'menu' | 'minus' | 'notebook' | 'plus' | 'search' | 'settings'
 
 const paths: Record<IconName, ReactNode> = {
   home: <><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></>,
@@ -26,6 +26,7 @@ const paths: Record<IconName, ReactNode> = {
   notebook: <><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/><path d="M4 6h2M4 10h2M4 14h2M4 18h2"/></>,
   plus: <path d="M12 5v14M5 12h14"/>,
   search: <><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></>,
+  settings: <><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.8 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.8-1l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.8-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.8 1l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2Z"/></>,
 }
 
 export function Icon({ name, className = 'size-5' }: { name: IconName; className?: string }) {

@@ -1,0 +1,13 @@
+import { Link } from 'react-router'
+import { useTranslation } from 'react-i18next'
+import { RequestResetForm } from '@/features/auth-password-reset'
+import { AuthLayout } from '@/widgets/auth-layout'
+
+export function ForgotPasswordPage() {
+  const { t } = useTranslation('auth')
+  return <AuthLayout title={t('forgotTitle')}>
+    <p className="mb-5 text-sm text-ink-soft">{t('forgotText')}</p>
+    <RequestResetForm />
+    <p className="mt-6 text-center"><Link to="/login" className="font-medium text-brand-strong underline">{t('backToLogin')}</Link></p>
+  </AuthLayout>
+}

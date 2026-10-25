@@ -556,8 +556,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Request a password reset (planned)
-         * @description Always 202 regardless of whether the email exists. Email delivery is out of MVP implementation scope (ADR-0007).
+         * Request a password reset
+         * @description Always 202 with the same response regardless of whether the email exists. In local prototype mode, the one-time reset link is written to API logs; this delivery mode is disabled when COOKIE_SECURE is true.
          */
         post: operations["postAuthPasswordResetRequest"];
         delete?: never;
@@ -575,7 +575,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Confirm a password reset (planned) */
+        /**
+         * Confirm a password reset
+         * @description Consumes a single-use token valid for one hour, updates the password and revokes refresh sessions.
+         */
         post: operations["postAuthPasswordResetConfirm"];
         delete?: never;
         options?: never;
@@ -1924,7 +1927,11 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        message: string;
+                    };
+                };
             };
             413: components["responses"]["PayloadTooLarge"];
             422: components["responses"]["InvalidData"];
@@ -1947,7 +1954,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Password changed; all sessions revoked. */
+            /** @description Password changed; refresh sessions revoked. Existing short-lived access tokens expire within 15 minutes. */
             204: {
                 headers: {
                     [name: string]: unknown;

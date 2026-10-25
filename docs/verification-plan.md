@@ -2,7 +2,7 @@
 
 **Project:** SEN Support Platform
 **Owner:** Ondasyn Aknur (SE-2420), Security, Privacy & Quality Assurance
-**Status:** Verification plan for the implemented university MVP prototype (25 October 2026), revision 3. Planned features and evaluations remain open as identified below.
+**Status:** Verification plan for the university MVP prototype (25 October 2026), revision 4. Password reset and parent-owned diary deletion are now implemented; field-level encryption and evaluations remain open as identified below.
 
 ## 1. Aim of verification
 
@@ -106,29 +106,35 @@ The project aim is to show that the platform gives measurably better protection 
 - Added metrics for admin access to diary text (SEC-15) and for 404 on cross-family access (SEC-11).
 - Load figures justified by an explicit usage assumption; audit overhead added as a separate measurement and as a risk.
 
-## 11. Results — 25 October 2026 (SSP-56)
+## 11. Results — 25 October 2026 (SSP-58)
 
 Measured with synthetic data on the development box and isolated containers. The full `make check` wrapper is still blocked by the host's missing Go toolchain; its component gates were run separately.
 
 | Check | Command | Result |
 |---|---|---|
-| Full gate | `make check` | Not completed on this host: Go and golangci-lint are absent; the backend suite and frontend gates were run separately |
-| Go suite | `docker run … golang:1.26 go test ./...` with temporary PostgreSQL 17 | All Go unit, integration, and contract packages passed |
+| Full gate | `make check` | Not completed on this host: `go`, `gofmt`, and `golangci-lint` are absent; component gates were run separately |
+| Go suite | `docker run --rm -v '/Users/luun/Downloads/demo v1:/work' -w /work/backend -e 'TEST_DATABASE_URL=postgres://postgres@host.docker.internal:55437/postgres?sslmode=disable' golang:1.26 go test ./...` | All Go unit, integration, and contract packages passed, including password-reset expiry/reuse and route-contract tests |
 | Backend coverage | `backend/scripts/covergate.sh` | Not rerun after these changes; previous baseline was 85.7 % total |
 | Access matrix | `TestAccessMatrix100PercentCells` | every role × relation × action cell asserted |
 | IDOR | `TestCrossFamilyIDORReturns404OnEveryEndpoint` | 404 on all child-scoped endpoints |
 | Frontend unit | `npm test` (Vitest) | 6 files, 15 tests passed |
-| E2E + a11y | `VITE_API_PROXY=http://127.0.0.1:18084 make e2e` (Playwright + axe, WCAG 2.1 AA tags) | 6/6 passed (guest, parent, specialist, admin, IDOR, mobile drawer); 0 axe violations in light/dark checks |
+| E2E + a11y | `VITE_API_PROXY=http://127.0.0.1:18084 make e2e` (Playwright + axe, WCAG 2.1 AA tags) | 6/6 passed; includes reset routes, parent deletion of own entry, specialist delete-action absence, and mobile drawer; 0 axe violations in checked screens |
 | Lighthouse (mobile preset, `vite preview`) | `npx lighthouse@12` | `/`: perf 91, a11y 100, best-practices 96; `/login`: 90 / 100 / 96; LCP 2.7 s (simulated throttling) |
-| Bundle | `npm run size:bundle` | initial JS 181.8 KB gzip (budget 200 KB) |
+| Bundle | `npm run size:bundle` | initial JS 186.9 KB gzip (budget 200 KB) |
 | Load | `k6 run loadtest/k6-diary.js` | 50 VU × 60 s: p95 6.19 ms, 0 % errors, 13 103 requests |
-| Dependencies | Go `govulncheck`; `npm audit --audit-level=high` | 0 called Go vulnerabilities (one uncalled module finding); 0 npm vulnerabilities |
+| Dependencies | Go `govulncheck ./...` in Go 1.26 container; `npm --prefix frontend audit --audit-level=high` | 0 called Go vulnerabilities (one uncalled module finding); 0 npm vulnerabilities |
+| Go lint | `golangci-lint v2.15.0 run ./...` in Go 1.26 container | 0 issues |
+| Go vet | `go vet ./...` in Go 1.26 container | Passed |
+| `make vuln` wrapper | `make vuln` | Not completed on this host because Go is absent; Go and npm scanners were run separately |
 | Secrets | `gitleaks git` / `gitleaks dir` | no leaks (2 expired local test JWTs in history allow-listed in `.gitleaksignore` with reason) |
 | Workflows | `actionlint` | no findings |
-| Compose images and services | Isolated `docker compose -p sspverifyhard2 --env-file /tmp/demo-v1-verify-hardening2.env up --build -d` | API and web images built; migrations completed; restricted-role API health check passed; synthetic seed succeeded |
+| Compose images and services | `docker compose -p sspview --env-file /tmp/demo-v1-verify-hardening2.env up --build -d` | API and web images rebuilt; migrations completed; API and web healthy; synthetic seed available |
 | Audit role permissions | `TestApplicationRoleCannotTamperWithAuditRows` | `ssp_app` cannot UPDATE or DELETE audit rows; retention is through the restricted function |
+| Password reset | `TestPasswordResetUniformResponseSingleUseAndExpiry`, `TestPasswordResetTokenIsOpaqueAndHashed` | Generic response for known/unknown accounts; hashed one-hour token; expiry/reuse rejected; refresh sessions revoked |
+| Diary deletion UI | Playwright parent/specialist diary scenario | Parent can delete own entry with confirmation; specialist has no delete action |
+| Password-reset frontend | Playwright guest axe checks on request and token form | Both routes accessible; HTTP calls use the generated OpenAPI client |
 | Trivy, ZAP baseline | Image scan and nightly scan | **Not verified** |
 
 The naive baseline comparison (section 5) and the usability test with 5 users (SF-08) are not part of this run and remain open.
 
-The API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, audit-role restrictions, and frontend-on-API are implemented. Password reset, field-level encryption, Trivy/ZAP scans, legal review, and usability testing remain open and must not be reported as completed.
+The API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, password reset, audit-role restrictions, and frontend-on-API are implemented. Field-level encryption, Trivy/ZAP scans, legal review, and usability testing remain open and must not be reported as completed. In local Compose mode only, reset links are written to API logs; keep that flag off for deployments with real accounts until a mail provider is configured.

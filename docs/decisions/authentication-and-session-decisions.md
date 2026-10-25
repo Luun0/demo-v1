@@ -1,8 +1,8 @@
 # Authentication, session and password decisions
 
 **Owner:** Aknur — Security, Privacy & QA  
-**Status:** Draft for supervisor and backend review, 22 October 2026  
-**Scope:** pre-defense design decision; the API does not yet implement authentication.
+**Status:** Design decisions and implementation notes, updated 25 October 2026
+**Scope:** Authentication and session design for the university MVP; implementation is in `backend/internal/application` and `backend/internal/adapter/httpapi`.
 
 ## Decision summary
 
@@ -12,7 +12,7 @@
 | Access credential | Short-lived signed access token held in browser memory only | Limits persistence after page close. Validate signature algorithm, issuer, audience, expiry and account status on each request. Never accept a role from client claims without checking trusted server-side data. |
 | Refresh credential | Opaque, high-entropy random token in `Secure`, `HttpOnly`, `SameSite=Lax` cookie; store only a hash server-side; rotate at refresh and revoke on logout/reuse detection | Cookie is not readable by JavaScript; because it is sent automatically, use CSRF protection on state-changing requests and strict Origin/CORS checks. |
 | Browser persistence | Do not put access or refresh tokens in `localStorage` or `sessionStorage` | Persistent script-readable storage increases the impact of XSS. |
-| Password reset / email verification | Single-use random token, hashed at rest, short expiry, generic response that does not reveal whether an email exists; invalidate outstanding reset tokens after use | Exact expiry and mail delivery mechanism remain backend decisions. Do not log token values. |
+| Password reset / email verification | Implemented reset uses a 256-bit random token, SHA-256 hash at rest, one-hour expiry, single use, generic request response and refresh-session revocation | No email provider is configured. Local-only `PASSWORD_RESET_LOG_LINK=true` writes the active reset URL to logs and is rejected with `COOKIE_SECURE=true`; treat logs as credentials. Email verification remains out of scope. |
 | Logout / revocation | Revoke the refresh-token family server-side and clear the cookie; reject inactive accounts and revoked credentials | Short access-token lifetime bounds the remaining exposure; if immediate access-token revocation is required, add a server-side session/version check. |
 
 ## Request flow

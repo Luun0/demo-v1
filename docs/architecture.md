@@ -212,7 +212,8 @@ All `datetime` values are stored in UTC. The diagram is a conceptual draft; exac
 | Audit service | Implemented (same transaction; denied actions too) | `application/service.go`, `audit.go` |
 | Parent-owned diary-entry deletion | Implemented; audited | `application.Service.DeleteEntry`, `TestDiaryDeletionOwnerOnlyAndAudited` |
 | Audit retention | Implemented as operator-run command; 365 days default | ADR-0005, `api retention` |
-| Password reset, field-level encryption | Planned | ADR-0007 |
+| Password reset | Implemented with a one-hour, single-use hashed token; local delivery link is opt-in and logged only with insecure local cookies | ADR-0007, `TestPasswordResetUniformResponseSingleUseAndExpiry` |
+| Field-level encryption | Planned | ADR-0007 |
 | TLS terminator / hosting | Planned (SF-05) | `deploy/nginx.conf` serves plain HTTP behind it |
 
 Layering is enforced mechanically: depguard (Go) forbids `net/http`/`pgx`/adapters in domain and application; eslint-plugin-boundaries forbids upward and cross-slice imports in the web client.

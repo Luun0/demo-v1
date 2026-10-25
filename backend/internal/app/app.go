@@ -52,13 +52,14 @@ func Build(ctx context.Context, cfg config.Config, opt Options) (*App, error) {
 	tokens := security.JWT{Secret: cfg.JWTSecret, Issuer: cfg.JWTIssuer, Audience: cfg.JWTAudience, TTL: cfg.AccessTTL}
 	svc, err := application.NewService(store, opt.Clock, hasher, tokens, ratelimit.New(cfg.LoginPerMinute, time.Minute),
 		application.Config{RefreshTTL: cfg.RefreshTTL, MaxFailedLogins: cfg.MaxFailedLogins, LockoutDuration: cfg.LockoutDuration,
-			AuditRetentionDays: cfg.AuditRetentionDays})
+			AuditRetentionDays: cfg.AuditRetentionDays, PasswordResetTTL: time.Hour})
 	if err != nil {
 		store.Close()
 		return nil, err
 	}
 	h := httpapi.New(svc, httpapi.Config{AllowedOrigins: cfg.AllowedOrigins, MaxBodyBytes: cfg.MaxBodyBytes,
-		CookieSecure: cfg.CookieSecure, RefreshTTL: cfg.RefreshTTL}, log,
+		CookieSecure: cfg.CookieSecure, RefreshTTL: cfg.RefreshTTL, PasswordResetBaseURL: cfg.PasswordResetBaseURL,
+		LogPasswordResetLinks: cfg.LogPasswordResetLinks}, log,
 		ratelimit.New(cfg.APIPerMinute, time.Minute), ratelimit.New(cfg.LoginPerMinute*3, time.Minute))
 	return &App{Store: store, Service: svc, Handler: h, Log: log}, nil
 }

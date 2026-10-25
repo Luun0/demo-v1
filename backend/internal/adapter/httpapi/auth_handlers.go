@@ -2,6 +2,8 @@ package httpapi
 
 import (
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/AknurOE/sen-support-platform/internal/application"
 	"github.com/AknurOE/sen-support-platform/internal/domain"
@@ -31,6 +33,46 @@ func (a *API) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusCreated, toUser(u))
+}
+
+const passwordResetMessage = "If the account exists, password reset instructions will be provided."
+
+func (a *API) requestPasswordReset(w http.ResponseWriter, r *http.Request) {
+	var in struct {
+		Email string `json:"email"`
+	}
+	if err := decode(r, &in); err != nil {
+		fail(w, r, a.log, err)
+		return
+	}
+	token, err := a.svc.RequestPasswordReset(r.Context(), in.Email)
+	if err != nil {
+		fail(w, r, a.log, err)
+		return
+	}
+	if token != "" && a.cfg.LogPasswordResetLinks {
+		link := strings.TrimRight(a.cfg.PasswordResetBaseURL, "/") + "/reset-password?token=" + url.QueryEscape(token)
+		// This is the prototype's development delivery channel. The flag is
+		// rejected when COOKIE_SECURE=true; API request logs never include it.
+		a.log.Info("development password reset link: " + link)
+	}
+	writeJSON(w, http.StatusAccepted, map[string]string{"message": passwordResetMessage})
+}
+
+func (a *API) confirmPasswordReset(w http.ResponseWriter, r *http.Request) {
+	var in struct {
+		Token    string `json:"token"`
+		Password string `json:"password"`
+	}
+	if err := decode(r, &in); err != nil {
+		fail(w, r, a.log, err)
+		return
+	}
+	if err := a.svc.ConfirmPasswordReset(r.Context(), in.Token, in.Password); err != nil {
+		fail(w, r, a.log, err)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (a *API) setSessionCookies(w http.ResponseWriter, s application.Session) {

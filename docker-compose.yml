@@ -5,6 +5,7 @@ x-api-env: &api-env
   DATABASE_URL: postgres://ssp_app:${DB_APP_PASSWORD:?set in .env}@db:5432/${DB_NAME:?set in .env}?sslmode=disable
   JWT_SECRET: ${JWT_SECRET:?set in .env (>= 32 bytes)}
   CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8081}
+  PASSWORD_RESET_LOG_LINK: ${PASSWORD_RESET_LOG_LINK:-true}
   COOKIE_SECURE: ${COOKIE_SECURE:-false}
   AUTO_MIGRATE: "false"
 
