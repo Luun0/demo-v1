@@ -4,13 +4,13 @@ import { changeLanguage, isLang, LANGS } from '@/shared/i18n'
 
 const labels = { kz: 'Қазақша', ru: 'Русский', en: 'English' } as const
 
-export function LanguageSwitch() {
+export function LanguageSwitch({ dark = false }: { dark?: boolean }) {
   const { t, i18n } = useTranslation()
   const id = useId()
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor={id} className="text-sm text-ink-soft">{t('language')}</label>
-      <select id={id} value={i18n.language} onChange={(e) => isLang(e.target.value) && void changeLanguage(e.target.value)} className="min-h-11 rounded-lg border border-line bg-surface px-2 text-ink">
+      <label htmlFor={id} className={`text-sm ${dark ? 'text-white/90' : 'text-ink-soft'}`}>{t('language')}</label>
+      <select id={id} value={i18n.language} onChange={(e) => isLang(e.target.value) && void changeLanguage(e.target.value)} className={`min-h-11 rounded-lg border px-2 ${dark ? 'border-white/30 bg-brand text-white' : 'border-line bg-surface text-ink'}`}>
         {LANGS.map((l) => (
           <option key={l} value={l} lang={l === 'kz' ? 'kk' : l}>{labels[l]}</option>
         ))}

@@ -142,6 +142,26 @@ func (s *Service) EditEntry(ctx context.Context, a *Actor, child, id uuid.UUID, 
 	return e, err
 }
 
+// DeleteEntry permits a parent to delete only their own entry and records the action.
+func (s *Service) DeleteEntry(ctx context.Context, a *Actor, child, id uuid.UUID) error {
+	_, err := s.guard(ctx, a, child, policy.DiaryDelete, "diary_entry", &id, func(res *policy.Resource) error {
+		e, err := s.uow.Repo().EntryByID(ctx, child, id, a.Role == domain.RoleParent)
+		if err == nil {
+			res.Author, res.Visibility = e.AuthorID == a.ID, e.Visibility
+		}
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	return s.uow.Within(ctx, func(r Repo) error {
+		if err := r.DeleteEntry(ctx, child, id); err != nil {
+			return err
+		}
+		return r.InsertAudit(ctx, s.event(ctx, a, &child, string(policy.DiaryDelete), "diary_entry", &id, domain.OutcomeSuccess))
+	})
+}
+
 // ListVersions returns the edit history of a visible entry.
 func (s *Service) ListVersions(ctx context.Context, a *Actor, child, id uuid.UUID) ([]domain.DiaryEntryVersion, error) {
 	_, err := s.guard(ctx, a, child, policy.DiaryVersions, "diary_entry", &id, func(res *policy.Resource) error {

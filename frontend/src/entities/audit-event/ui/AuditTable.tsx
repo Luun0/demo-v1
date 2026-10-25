@@ -8,7 +8,7 @@ const tone = { success: 'brand', denied: 'danger', failure: 'warn' } as const
 export function AuditTable({ events, caption }: { events: AuditEvent[]; caption: string }) {
   const { t, i18n } = useTranslation('access')
   return (
-    <div className="overflow-x-auto rounded-xl border border-line">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-soft">
       <table className="w-full text-left">
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-muted text-sm text-ink">

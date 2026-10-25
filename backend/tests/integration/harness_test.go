@@ -35,10 +35,11 @@ func (s *syncBuf) Write(p []byte) (int, error) { s.mu.Lock(); defer s.mu.Unlock(
 func (s *syncBuf) String() string              { s.mu.Lock(); defer s.mu.Unlock(); return s.b.String() }
 
 type env struct {
-	t    *testing.T
-	srv  *httptest.Server
-	app  *app.App
-	logs *syncBuf
+	t     *testing.T
+	srv   *httptest.Server
+	app   *app.App
+	logs  *syncBuf
+	dbURL string
 }
 
 func newEnv(t *testing.T, overrides map[string]string) *env {
@@ -62,7 +63,7 @@ func newEnv(t *testing.T, overrides map[string]string) *env {
 	}
 	srv := httptest.NewServer(a.Handler)
 	t.Cleanup(func() { srv.Close(); a.Store.Close() })
-	return &env{t: t, srv: srv, app: a, logs: logs}
+	return &env{t: t, srv: srv, app: a, logs: logs, dbURL: vars["DATABASE_URL"]}
 }
 
 // client is one browser-like user agent with its own cookie jar.

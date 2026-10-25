@@ -54,8 +54,10 @@ func run() error {
 		return err
 	}
 	defer a.Store.Close()
-	if err := a.Store.Migrate(ctx); err != nil {
-		return err
+	if cmd == "migrate" || cfg.AutoMigrate {
+		if err := a.Store.Migrate(ctx); err != nil {
+			return err
+		}
 	}
 	switch cmd {
 	case "migrate":
@@ -64,6 +66,9 @@ func run() error {
 		return app.Seed(ctx, a.Service)
 	case "bootstrap-admin":
 		_, err := a.Service.BootstrapAdmin(ctx, os.Getenv("ADMIN_EMAIL"), os.Getenv("ADMIN_PASSWORD"), "Platform", "Admin")
+		return err
+	case "retention":
+		_, err := a.Service.RunRetention(ctx)
 		return err
 	case "serve":
 	default:

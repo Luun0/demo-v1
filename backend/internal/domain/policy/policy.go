@@ -24,6 +24,7 @@ const (
 	DiaryList        Action = "diary:list"
 	DiaryCreate      Action = "diary:create"
 	DiaryEdit        Action = "diary:edit"
+	DiaryDelete      Action = "diary:delete"
 	DiaryVersions    Action = "diary:versions"
 	ChildAudit       Action = "audit:child"
 	SpecialistDir    Action = "specialist:directory"
@@ -33,7 +34,7 @@ const (
 var AllActions = []Action{
 	UserManage, SystemAudit, ChildCreate, ChildView, ChildEdit, ChildDelete, ChildExport,
 	GuardianLink, AssignmentManage, SessionList, SessionCreate, SessionUpdate,
-	DiaryList, DiaryCreate, DiaryEdit, DiaryVersions, ChildAudit, SpecialistDir,
+	DiaryList, DiaryCreate, DiaryEdit, DiaryDelete, DiaryVersions, ChildAudit, SpecialistDir,
 }
 
 // Decision is the outcome of Decide.
@@ -124,6 +125,8 @@ func decideParent(a Action, r Resource) Decision {
 		return boolDecision(domain.ParentVisibilityAllowed(r.Visibility))
 	case DiaryEdit:
 		return boolDecision(r.Author && domain.ParentVisibilityAllowed(r.Visibility))
+	case DiaryDelete:
+		return boolDecision(r.Author)
 	}
 	return Deny
 }
@@ -142,6 +145,8 @@ func decideSpecialist(a Action, r Resource) Decision {
 		return boolDecision(r.AssignedSession)
 	case DiaryEdit:
 		return boolDecision(r.Author)
+	case DiaryDelete:
+		return Deny // specialist observations are retained
 	}
 	return Deny
 }

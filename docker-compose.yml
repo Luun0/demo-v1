@@ -2,10 +2,11 @@
 name: sen-support-platform
 
 x-api-env: &api-env
-  DATABASE_URL: postgres://${DB_USER:?set in .env}:${DB_PASSWORD:?set in .env}@db:5432/${DB_NAME:?set in .env}?sslmode=disable
+  DATABASE_URL: postgres://ssp_app:${DB_APP_PASSWORD:?set in .env}@db:5432/${DB_NAME:?set in .env}?sslmode=disable
   JWT_SECRET: ${JWT_SECRET:?set in .env (>= 32 bytes)}
   CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8081}
   COOKIE_SECURE: ${COOKIE_SECURE:-false}
+  AUTO_MIGRATE: "false"
 
 services:
   db:
@@ -15,10 +16,12 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:?set in .env}
     ports:
       - "127.0.0.1:${DB_PORT:-5432}:5432"   # never exposed beyond localhost
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./deploy/postgres-init/01-app-role.sh:/docker-entrypoint-initdb.d/01-app-role.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
       interval: 5s
@@ -28,7 +31,9 @@ services:
   migrate:
     build: ./backend
     command: ["migrate"]
-    environment: *api-env
+    environment:
+      <<: *api-env
+      DATABASE_URL: postgres://${DB_USER:?set in .env}:${DB_PASSWORD:?set in .env}@db:5432/${DB_NAME:?set in .env}?sslmode=disable
     depends_on:
       db: { condition: service_healthy }
     restart: "no"

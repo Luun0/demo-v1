@@ -25,6 +25,7 @@ func childEndpoints(child, entry, session, spec uuid.UUID) [][3]any {
 		{"GET", c + "/diary-entries", nil},
 		{"POST", c + "/diary-entries", diaryBody},
 		{"PUT", c + "/diary-entries/" + entry.String(), diaryBody},
+		{"DELETE", c + "/diary-entries/" + entry.String(), nil},
 		{"GET", c + "/diary-entries/" + entry.String() + "/versions", nil},
 		{"GET", c + "/audit-events", nil},
 		{"POST", c + "/exports", nil},
@@ -64,6 +65,22 @@ func TestCrossFamilyIDORReturns404OnEveryEndpoint(t *testing.T) {
 	if !strings.Contains(r.body, "Mira") {
 		t.Fatal("child 1 modified by IDOR attempt")
 	}
+}
+
+func TestDiaryDeletionOwnerOnlyAndAudited(t *testing.T) {
+	e := newEnv(t, nil)
+	w := e.world()
+	entry := e.entry(w.parent1, w.child1, "shared", "delete me")
+	path := "/api/v1/children/" + w.child1.String() + "/diary-entries/" + entry.String()
+	must(t, w.coParent.do("DELETE", path, nil), 403)
+	must(t, w.spec1.do("DELETE", path, nil), 403)
+	must(t, w.admin.do("DELETE", path, nil), 403)
+	must(t, w.parent1.do("DELETE", path, nil), 204)
+	audit := must(t, w.parent1.do("GET", "/api/v1/children/"+w.child1.String()+"/audit-events", nil), 200)
+	if !strings.Contains(audit.body, `"action":"diary:delete"`) || strings.Contains(audit.body, "delete me") {
+		t.Fatalf("delete audit missing or contains content: %s", audit.body)
+	}
+	must(t, w.parent1.do("GET", "/api/v1/children/"+w.child1.String()+"/diary-entries/"+entry.String()+"/versions", nil), 404)
 }
 
 func TestGuestGets401(t *testing.T) {

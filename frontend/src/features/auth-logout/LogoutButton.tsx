@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { api, readCookie, setAccessToken } from '@/shared/api'
-import { Button } from '@/shared/ui'
+import { Button, Icon } from '@/shared/ui'
 
 export function LogoutButton({ className }: { className?: string }) {
   const { t } = useTranslation('nav')
@@ -19,6 +19,7 @@ export function LogoutButton({ className }: { className?: string }) {
   }
   return (
     <Button variant="ghost" className={className} onClick={() => void logout()}>
+      <Icon name="exit" />
       {t('logout')}
     </Button>
   )

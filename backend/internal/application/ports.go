@@ -64,6 +64,7 @@ type Repo interface {
 	CreateEntry(ctx context.Context, e *domain.DiaryEntry) error
 	EntryByID(ctx context.Context, child, id uuid.UUID, sharedOnly bool) (domain.DiaryEntry, error)
 	UpdateEntry(ctx context.Context, e *domain.DiaryEntry) error
+	DeleteEntry(ctx context.Context, child, entry uuid.UUID) error
 	InsertVersion(ctx context.Context, v *domain.DiaryEntryVersion) error
 	NextVersionNumber(ctx context.Context, entry uuid.UUID) (int, error)
 	ListVersions(ctx context.Context, entry uuid.UUID) ([]domain.DiaryEntryVersion, error)
@@ -74,6 +75,7 @@ type Repo interface {
 
 	InsertAudit(ctx context.Context, e *domain.AuditEvent) error
 	ListAudit(ctx context.Context, child *uuid.UUID, limit int, after *Cursor) ([]domain.AuditEvent, error)
+	DeleteAuditBefore(ctx context.Context, cutoff time.Time) (int64, error)
 }
 
 // UnitOfWork runs fn in one transaction; Repo() is for single statements.

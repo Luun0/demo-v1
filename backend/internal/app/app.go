@@ -51,7 +51,8 @@ func Build(ctx context.Context, cfg config.Config, opt Options) (*App, error) {
 	hasher := security.Argon2{Memory: cfg.Argon2MemoryKiB, Time: cfg.Argon2Time, Threads: cfg.Argon2Threads}
 	tokens := security.JWT{Secret: cfg.JWTSecret, Issuer: cfg.JWTIssuer, Audience: cfg.JWTAudience, TTL: cfg.AccessTTL}
 	svc, err := application.NewService(store, opt.Clock, hasher, tokens, ratelimit.New(cfg.LoginPerMinute, time.Minute),
-		application.Config{RefreshTTL: cfg.RefreshTTL, MaxFailedLogins: cfg.MaxFailedLogins, LockoutDuration: cfg.LockoutDuration})
+		application.Config{RefreshTTL: cfg.RefreshTTL, MaxFailedLogins: cfg.MaxFailedLogins, LockoutDuration: cfg.LockoutDuration,
+			AuditRetentionDays: cfg.AuditRetentionDays})
 	if err != nil {
 		store.Close()
 		return nil, err

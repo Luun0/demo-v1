@@ -1006,6 +1006,23 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
       operationId: putChildrenChildIdDiaryEntriesEntryId
+    delete:
+      tags:
+      - diary
+      summary: Delete an authored parent diary entry
+      description: Parents may delete only their own entries. Specialists' observations are retained. The action is audited.
+      responses:
+        '204':
+          description: Entry deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      operationId: deleteChildrenChildIdDiaryEntriesEntryId
   /children/{childId}/diary-entries/{entryId}/versions:
     parameters:
     - $ref: '#/components/parameters/ChildId'

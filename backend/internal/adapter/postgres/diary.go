@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -36,6 +37,11 @@ func (r *Repo) EntryByID(ctx context.Context, child, id uuid.UUID, sharedOnly bo
 func (r *Repo) UpdateEntry(ctx context.Context, e *domain.DiaryEntry) error {
 	return r.execOne(ctx, `UPDATE diary_entries SET type=$3, visibility=$4, content=$5, observed_at=$6, updated_at=$7
 		WHERE child_id=$1 AND id=$2`, e.ChildID, e.ID, e.Type, e.Visibility, e.Content, e.ObservedAt, e.UpdatedAt)
+}
+
+// DeleteEntry removes an entry and its versions, scoped to the child.
+func (r *Repo) DeleteEntry(ctx context.Context, child, entry uuid.UUID) error {
+	return r.execOne(ctx, `DELETE FROM diary_entries WHERE child_id=$1 AND id=$2`, child, entry)
 }
 
 // InsertVersion stores an immutable version.
@@ -121,4 +127,14 @@ func (r *Repo) ListAudit(ctx context.Context, child *uuid.UUID, limit int, after
 		err := row.Scan(&e.ID, &e.ActorID, &e.ChildID, &e.Action, &e.Resource, &e.ResourceID, &e.Outcome, &e.RequestID, &e.OccurredAt)
 		return e, err
 	})
+}
+
+// DeleteAuditBefore removes audit rows older than cutoff.
+func (r *Repo) DeleteAuditBefore(ctx context.Context, cutoff time.Time) (int64, error) {
+	var removed int64
+	err := r.q.QueryRow(ctx, `SELECT prune_audit_events($1)`, cutoff).Scan(&removed)
+	if err != nil {
+		return 0, mapErr(err)
+	}
+	return removed, nil
 }
