@@ -6,6 +6,7 @@ import { EntryCard, useDiary } from '@/entities/diary-entry'
 import { can } from '@/entities/viewer'
 import { EditEntryDialog } from '@/features/diary-edit-entry'
 import { HistoryDialog } from '@/features/diary-view-history'
+import { DeleteEntryDialog } from '@/features/diary-delete-entry'
 
 export function DiaryFeed({ childId, viewer }: { childId: string; viewer: User }) {
   const { t } = useTranslation('diary')
@@ -47,6 +48,7 @@ export function DiaryFeed({ childId, viewer }: { childId: string; viewer: User }
                 actions={
                   <>
                     {e.author_id === viewer.id && <EditEntryDialog entry={e} canChooseVisibility={chooseVis} />}
+                    {can(viewer.role, 'diary:delete') && e.author_id === viewer.id && <DeleteEntryDialog entry={e} />}
                     <HistoryDialog entry={e} />
                   </>
                 }

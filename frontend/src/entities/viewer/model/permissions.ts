@@ -1,10 +1,10 @@
 import type { Role } from '@/shared/api'
 
 /** UI hints only; the server is the authority (policy.Decide). */
-export type Permission = 'child:create' | 'diary:choose-visibility' | 'audit:child' | 'admin' | 'specialist:directory'
+export type Permission = 'child:create' | 'diary:choose-visibility' | 'diary:delete' | 'audit:child' | 'admin' | 'specialist:directory'
 
 const grants: Record<Role, Permission[]> = {
-  parent: ['child:create', 'audit:child', 'specialist:directory'],
+  parent: ['child:create', 'diary:delete', 'audit:child', 'specialist:directory'],
   specialist: ['diary:choose-visibility'],
   admin: ['admin', 'audit:child', 'specialist:directory'],
 }

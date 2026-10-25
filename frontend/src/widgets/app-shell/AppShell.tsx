@@ -11,7 +11,7 @@ import { MobileDrawer } from './MobileDrawer'
 const navIcons: Record<string, IconName> = {
   'nav:dashboard': 'home', 'nav:profile': 'child', 'nav:schedule': 'calendar',
   'nav:diary': 'diary', 'nav:team': 'people', 'nav:accessLog': 'access',
-  'nav:users': 'people', 'nav:audit': 'shield',
+  'nav:users': 'settings', 'nav:audit': 'shield',
 }
 
 export function AppShell() {

@@ -15,6 +15,10 @@ test('guest: landing and login are accessible; /app redirects to login', async (
   await expectAccessible(page)
   await page.goto('/register')
   await expectAccessible(page)
+  await page.goto('/forgot-password')
+  await expectAccessible(page)
+  await page.goto('/reset-password?token=invalid-demo-token')
+  await expectAccessible(page)
 })
 
 test('parent: dashboard, diary without specialist-only notes, session restore, no token in storage', async ({ page }) => {
@@ -41,6 +45,15 @@ test('parent: dashboard, diary without specialist-only notes, session restore, n
   const storage = await page.evaluate(() => JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }))
   expect(storage).not.toMatch(/eyJ/)
 
+  const ownEntry = page.locator('article').filter({ hasText: note })
+  await ownEntry.getByRole('button', { name: 'Delete entry' }).click()
+  const confirmation = page.getByRole('dialog')
+  await expect(confirmation).toBeVisible()
+  await expectAccessible(page)
+  await confirmation.getByRole('button', { name: 'Delete' }).click()
+  await expect(page.getByText(note)).toHaveCount(0)
+  await expectAccessible(page)
+
   await page.getByRole('link', { name: 'Access log' }).first().click()
   await expect(page.getByRole('table')).toBeVisible()
   await expectAccessible(page)
@@ -52,6 +65,7 @@ test('specialist: sees specialist-only notes; cannot open access log', async ({ 
   await page.getByRole('navigation', { name: /sections/i }).getByRole('link', { name: 'Diary' }).click()
   await expect(page.getByText('Synthetic specialist-only note.')).toBeVisible()
   await expect(page.getByLabel('Visibility')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Delete entry' })).toHaveCount(0)
   await expectAccessible(page)
   const url = page.url().replace(/\/diary$/, '/access-log')
   await page.goto(url)
