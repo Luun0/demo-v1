@@ -53,6 +53,7 @@ Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61)
 | REST API contract (OpenAPI 3.1, problem+json) | **Implemented** | `make contract-lint`; `TestRoutesMatchOpenAPI` keeps routes == contract |
 | Go API: auth (Argon2id, JWT + rotated refresh cookie, CSRF), RBAC + relationship + visibility, children, team, sessions, versioned diary, export/delete, audit | **Implemented** | Go unit/integration/contract suite; access matrix and IDOR tests |
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
+| Backend statement coverage | **85.0% locally after SSP-64 test additions** | `make check` on 26 October 2026; fresh base measurement was 84.9%. The previously documented ~85.7% was not reproduced; see [verification-plan §13](docs/verification-plan.md#13-test-and-coverage-hardening-26-october-2026-ssp-64). |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
 | Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242594381 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242594381) |

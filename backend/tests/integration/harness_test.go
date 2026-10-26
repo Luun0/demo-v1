@@ -35,14 +35,14 @@ func (s *syncBuf) Write(p []byte) (int, error) { s.mu.Lock(); defer s.mu.Unlock(
 func (s *syncBuf) String() string              { s.mu.Lock(); defer s.mu.Unlock(); return s.b.String() }
 
 type env struct {
-	t     *testing.T
+	t     testing.TB
 	srv   *httptest.Server
 	app   *app.App
 	logs  *syncBuf
 	dbURL string
 }
 
-func newEnv(t *testing.T, overrides map[string]string) *env {
+func newEnv(t testing.TB, overrides map[string]string) *env {
 	t.Helper()
 	vars := map[string]string{
 		"DATABASE_URL": testpg.NewDB(t), "JWT_SECRET": strings.Repeat("k", 48), "CORS_ALLOWED_ORIGINS": testOrigin,
@@ -86,7 +86,7 @@ type resp struct {
 	hdr  http.Header
 }
 
-func (r resp) json(t *testing.T, v any) {
+func (r resp) json(t testing.TB, v any) {
 	t.Helper()
 	if err := json.Unmarshal([]byte(r.body), v); err != nil {
 		t.Fatalf("decode %q: %v", r.body, err)
@@ -147,7 +147,7 @@ func (c *client) login(email, password string) resp {
 	return r
 }
 
-func must(t *testing.T, r resp, code int) resp {
+func must(t testing.TB, r resp, code int) resp {
 	t.Helper()
 	if r.code != code {
 		t.Fatalf("want %d got %d: %s", code, r.code, r.body)

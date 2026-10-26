@@ -152,3 +152,16 @@ The following CI checks use synthetic data. The ZAP workflow was manually dispat
 ZAP warning categories reported: Information Disclosure - Suspicious Comments (1), Storable and Cacheable Content (8), Permissions Policy Header Not Set (5), Modern Web Application (3), and Cross-Origin-Embedder-Policy Header Missing or Invalid (9). Counts are alert instances/URLs as reported by ZAP. These warnings have not been triaged; this result is not a claim that the application has no security findings. Run and review another baseline before release.
 
 The naive baseline comparison (section 5), usability test with 5 users (SF-08), legal review, and PRV-03a field-level encryption remain open. Shared-store rate limiting is optional and was not implemented; the configured default remains the in-memory limiter.
+
+## 13. Test and coverage hardening (26 October 2026, SSP-64)
+
+Added table-driven boundary checks for diary validation (including the 10,000-rune Unicode limit), default-deny cases for unknown policy actions, and integration assertions that `%`, `_`, and `\\` in diary searches are treated literally. Added a PostgreSQL benchmark with 1,000 synthetic diary entries; setup is outside the timed section.
+
+| Check | Command | Result |
+|---|---|---|
+| Full quality gate | `make check` | Passed: total Go coverage 85.0%; policy 97.6%, application 86.1%, security 94.6%, HTTP adapter 82.7%; initial JS gzip 186.9 KB / 200 KB. |
+| Focused tests | `go test ./internal/domain/policy ./internal/application` | Passed. |
+| Diary visibility tests | `go test ./tests/integration -run 'Test(DiarySearchTreatsLikeWildcardsLiterally|SpecialistsOnlyNeverReachesParent)$' -count=1` | Passed against a fresh migrated PostgreSQL database; synthetic notes only. |
+| Diary list benchmarks | `go test ./tests/integration -run '^$' -bench '^BenchmarkDiaryListVisibilityFilter$' -benchmem` | Passed on Apple M2. guardian shared page: 118,446 ns/op; specialist all page: 236,811 ns/op; guardian search: 432,104 ns/op; specialist private filter: 228,836 ns/op. These are local diagnostic measurements, not a cross-machine performance claim. |
+
+The fresh base measurement was 84.9%, increasing to 85.0% after these focused tests. The older ~85.7% figure in section 11 was not reproduced by the current gate; it has not been presented as achieved. The additional tests protect security and validation edge cases, while the suite remains under its configured gates. No runtime, API, OpenAPI, route, or access-matrix change was made.
