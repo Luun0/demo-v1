@@ -2,12 +2,13 @@
   <title id="mark-title">SEN Support</title>
   <desc id="mark-desc">Two caregivers gently cradle a child.</desc>
   <style>
-    :root { --color-brand-strong: #306a63; --color-accent: #dc7651; color: var(--color-brand-strong); }
-    @media (prefers-color-scheme: dark) { :root { --color-brand-strong: #83c5b6; --color-accent: #ffad91; } }
+    :root { --color-brand: #17695e; --color-accent: #c04c2d; --color-on-brand: #ffffff; }
+    @media (prefers-color-scheme: dark) { :root { --color-brand: #235f55; --color-accent: #ef8d6b; --color-on-brand: #ffffff; } }
   </style>
-  <path d="M8 33c1-9 5-15 12-17m8 0c7 2 11 8 12 17" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="15" cy="12" r="5" fill="currentColor"/>
-  <circle cx="33" cy="12" r="5" fill="currentColor"/>
-  <path d="M8 33c4 7 9 10 16 10s12-3 16-10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="24" cy="26" r="5" fill="var(--color-accent)"/>
+  <rect x="1" y="1" width="46" height="46" rx="16" fill="var(--color-brand)"/>
+  <path d="M8 33c0-9 3-15 10-19m12 0c7 4 10 10 10 19" fill="none" stroke="var(--color-on-brand)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="15" cy="12" r="5" fill="var(--color-on-brand)"/>
+  <circle cx="33" cy="12" r="5" fill="var(--color-on-brand)"/>
+  <path d="M8 32c4 8 9 12 16 12s12-4 16-12" fill="none" stroke="var(--color-on-brand)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="24" cy="26" r="5.5" fill="var(--color-accent)"/>
 </svg>

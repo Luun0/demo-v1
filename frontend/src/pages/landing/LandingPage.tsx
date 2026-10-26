@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitch } from '@/features/language-switch'
+import { ThemeSwitch } from '@/features/theme-switch'
 import { Icon, Logo } from '@/shared/ui'
 
 const features = ['f1', 'f2', 'f3'] as const
@@ -99,10 +100,26 @@ export function LandingPage() {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:p-3">{t('common:skipToContent')}</a>
       <header className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-5 py-5 md:px-10">
         <Logo />
-        <nav aria-label={t('common:nav:main')} className="flex items-center gap-4">
+        <nav aria-label={t('common:nav:main')} className="hidden items-center gap-5 md:flex">
+          <a href="#for-people" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPeople')}</a>
+          <a href="#how-it-works" className="font-medium text-ink-soft hover:text-brand-ink">{t('navWorkflow')}</a>
+          <a href="#privacy" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPrivacy')}</a>
+          <ThemeSwitch />
           <LanguageSwitch />
           <Link to="/login" className="rounded-lg px-3 py-2 font-medium text-brand-ink transition-[background-color] hover:bg-brand/10 focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none">{t('ctaLogin')}</Link>
+          <Link to="/register" className="inline-flex min-h-11 items-center rounded-lg bg-accent px-4 font-semibold text-on-accent shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none motion-reduce:transform-none">{t('ctaRegister')}</Link>
         </nav>
+        <details className="group relative md:hidden">
+          <summary aria-label={t('common:menu')} className="grid min-h-11 min-w-11 cursor-pointer list-none place-items-center rounded-xl border border-line bg-surface text-brand-ink focus-visible:ring-2 focus-visible:ring-accent"><Icon name="menu" /></summary>
+          <div className="absolute right-0 top-14 z-40 grid min-w-64 gap-4 rounded-2xl border border-line bg-surface p-4 shadow-panel">
+            <a href="#for-people" className="min-h-11 py-2 font-medium text-ink">{t('navPeople')}</a>
+            <a href="#how-it-works" className="min-h-11 py-2 font-medium text-ink">{t('navWorkflow')}</a>
+            <a href="#privacy" className="min-h-11 py-2 font-medium text-ink">{t('navPrivacy')}</a>
+            <div className="flex items-center justify-between gap-3 border-t border-line pt-3"><ThemeSwitch /><LanguageSwitch /></div>
+            <Link to="/login" className="min-h-11 py-2 font-medium text-brand-ink">{t('ctaLogin')}</Link>
+            <Link to="/register" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-4 font-semibold text-on-accent">{t('ctaRegister')}</Link>
+          </div>
+        </details>
       </header>
 
       <main id="main" className="mx-auto max-w-[90rem] px-5 pb-16 md:px-10">
@@ -136,6 +153,15 @@ export function LandingPage() {
         </section>
 
         <Reveal className="py-14 md:py-20">
+          <section id="for-people" aria-labelledby="for-people-title">
+            <div className="mb-8 max-w-2xl"><p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('rolesEyebrow')}</p><h2 id="for-people-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('rolesTitle')}</h2></div>
+            <div className="grid gap-3 md:grid-cols-3">
+              {roles.map((role, index) => <article key={role} className={`surface-lift min-h-52 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}><p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</p><h3 className="mt-8 text-xl font-semibold">{t(`${role}Title`)}</h3><p className={`mt-2 ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${role}Text`)}</p></article>)}
+            </div>
+          </section>
+        </Reveal>
+
+        <Reveal className="py-14 md:py-20">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <h2 className="max-w-xl text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('workspaceTitle')}</h2>
             <p className="max-w-sm text-ink-soft">{t('whyText')}</p>
@@ -158,14 +184,14 @@ export function LandingPage() {
           </section>
         </Reveal>
 
-        <section className="grid gap-10 py-16 md:grid-cols-[.8fr_1.2fr] md:py-24">
+        <section id="how-it-works" className="grid gap-10 py-16 md:grid-cols-[.8fr_1.2fr] md:py-24">
           <div className="max-w-md"><p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('howTitle')}</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('whyTitle')}</h2><p className="mt-5 text-ink-soft">{t('whyText')}</p></div>
           <ol className="border-t border-line">
             {steps.map((step, index) => <li key={step} className="group flex items-start gap-5 border-b border-line px-3 py-6 transition-[background-color] duration-200 hover:bg-surface focus-within:bg-surface motion-reduce:transition-none"><span className="pt-1 text-sm font-semibold text-accent-ink">0{index + 1}</span><p className="flex-1 text-lg font-medium leading-snug md:text-xl">{t(step)}</p><Icon name="arrow" className="mt-1 size-5 -rotate-45 text-brand-ink transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none" /></li>)}
           </ol>
         </section>
 
-        <section className="grid gap-10 border-y border-line py-14 md:grid-cols-2 md:py-20">
+        <section id="privacy" className="grid gap-10 border-y border-line py-14 md:grid-cols-2 md:py-20">
           <div><p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-ink">{t('privacyTitle')}</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-4xl">{t('privacyTitle')}</h2></div>
           <div><p className="text-lg leading-relaxed text-ink-soft">{t('privacyText')}</p><div className="mt-6 flex items-center gap-3 border-t border-line pt-4"><span className="grid size-10 place-items-center rounded-full bg-brand text-on-brand"><Icon name="lock" /></span><p className="font-semibold">{t('adminText')}</p></div></div>
         </section>
@@ -175,7 +201,14 @@ export function LandingPage() {
           <Link to="/register" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-on-accent px-5 font-semibold text-accent transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift active:translate-y-px focus-visible:ring-2 focus-visible:ring-on-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none">{t('ctaRegister')}<Icon name="arrow" className="size-5 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none" /></Link>
         </section>
       </main>
-      <footer className="border-t border-line px-5 py-8 md:px-10"><div className="mx-auto flex max-w-[90rem] flex-wrap items-end justify-between gap-5"><Logo /><span className="text-sm text-ink-soft">{t('footerNote')}</span></div></footer>
+      <footer className="relative overflow-hidden border-t border-line px-5 py-10 md:px-10 md:py-14">
+        <span aria-hidden="true" className="footer-watermark pointer-events-none absolute bottom-[-.25em] right-0 select-none" />
+        <div className="relative mx-auto grid max-w-[90rem] gap-10 md:grid-cols-[1.4fr_.7fr_.7fr]">
+          <div><Logo /><p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-soft">{t('footerNote')}</p></div>
+          <div><h2 className="font-semibold">{t('footerExplore')}</h2><ul className="mt-3 space-y-2 text-sm"><li><a className="text-ink-soft hover:text-brand-ink" href="#for-people">{t('navPeople')}</a></li><li><a className="text-ink-soft hover:text-brand-ink" href="#how-it-works">{t('navWorkflow')}</a></li><li><a className="text-ink-soft hover:text-brand-ink" href="#privacy">{t('navPrivacy')}</a></li></ul></div>
+          <div><h2 className="font-semibold">{t('footerAccount')}</h2><ul className="mt-3 space-y-2 text-sm"><li><Link className="text-ink-soft hover:text-brand-ink" to="/login">{t('ctaLogin')}</Link></li><li><Link className="text-ink-soft hover:text-brand-ink" to="/register">{t('ctaRegister')}</Link></li></ul></div>
+        </div>
+      </footer>
     </div>
   )
 }

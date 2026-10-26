@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useViewer } from '@/entities/viewer'
 import { LogoutButton } from '@/features/auth-logout'
 import { LanguageSwitch } from '@/features/language-switch'
+import { ThemeSwitch } from '@/features/theme-switch'
 import { childNav, mainNav } from '@/shared/config/nav'
 import { Icon, Logo, type IconName } from '@/shared/ui'
 import { MobileDrawer } from './MobileDrawer'
@@ -56,6 +57,7 @@ export function AppShell() {
           </button>
           <p className="text-lg font-semibold text-ink">{t(active?.labelKey ?? 'brand')}</p>
           <div className="ml-auto flex items-center gap-3">
+            <ThemeSwitch />
             <LanguageSwitch />
             <span className="hidden rounded-full border border-line bg-canvas px-3 py-1.5 text-sm sm:inline">
               {viewer.data && `${viewer.data.first_name} · ${t(`roles.${viewer.data.role}`)}`}

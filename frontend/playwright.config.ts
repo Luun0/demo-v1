@@ -11,7 +11,9 @@ export default defineConfig({
   use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure', locale: 'en-GB' },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] }, grepInvert: /@mobile/ },
-    { name: 'mobile', use: { ...devices['Pixel 7'] }, grep: /@mobile/ },
+    // Keep the Pixel 7 viewport, touch input and mobile UA while avoiding
+    // Playwright's mobile viewport scaling, which misroutes pointer events on macOS.
+    { name: 'mobile', use: { ...devices['Pixel 7'], isMobile: false }, grep: /@mobile/ },
   ],
   webServer: { command: 'npm run build && npx vite preview', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI, timeout: 120_000 },
 })
