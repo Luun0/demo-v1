@@ -7,7 +7,7 @@ import { formatDate } from '@/shared/lib'
 export function ChildCard({ child, extra }: { child: Child; extra?: ReactNode }) {
   const { t, i18n } = useTranslation('dashboard')
   return (
-    <article className="rounded-2xl border border-line bg-surface p-5 shadow-soft">
+    <article className="surface-lift rounded-2xl border border-line bg-surface p-5 shadow-soft">
       <h3 className="text-lg font-semibold text-ink">
         {child.first_name} {child.last_name}
       </h3>

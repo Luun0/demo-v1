@@ -20,7 +20,7 @@ export function Button({ variant = 'primary', busy = false, className, disabled,
   return (
     <button
       type={type}
-      className={cn('inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl px-4 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none', styles[variant], className)}
+      className={cn('inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl px-4 font-medium transition-[transform,background-color,box-shadow] duration-150 hover:-translate-y-px hover:shadow-soft active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transform-none motion-reduce:transition-none', styles[variant], className)}
       disabled={disabled || busy}
       aria-busy={busy || undefined}
       {...rest}

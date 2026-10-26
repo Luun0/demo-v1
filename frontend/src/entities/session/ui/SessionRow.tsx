@@ -9,7 +9,7 @@ const tone = { scheduled: 'success', completed: 'neutral', cancelled: 'danger' }
 export function SessionRow({ session, actions }: { session: SupportSession; actions?: ReactNode }) {
   const { t, i18n } = useTranslation('schedule')
   return (
-    <li className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-4 shadow-soft">
+    <li className="surface-lift flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-4 shadow-soft">
       <div>
         <p className="font-semibold text-ink">{session.title}</p>
         <p className="text-ink-soft">
