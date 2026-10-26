@@ -46,7 +46,7 @@ Full objectives and success criteria: [docs/proposal.md](docs/proposal.md).
 
 ## Current status
 
-Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61). Every "done" row links to the command, test, or CI run that proves it; see [verification-plan §12](docs/verification-plan.md#12-follow-up-verification-26-october-2026-ssp-61).
+Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-66). Every "done" row links to the command, test, or CI run that proves it; the latest verification sections are [§14](docs/verification-plan.md#14-read-path-index-review-26-october-2026-ssp-65) and [§15](docs/verification-plan.md#15-frontend-route-performance-26-october-2026-ssp-66).
 
 | Area | State | Evidence |
 |---|---|---|
