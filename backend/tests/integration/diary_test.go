@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"net/url"
 	"strings"
 	"testing"
 
@@ -147,6 +148,33 @@ func TestDiaryPaginationAndXSSStoredAsText(t *testing.T) {
 	must(t, w.parent1.do("GET", c+"?limit=0", nil), 422)
 	must(t, w.parent1.do("GET", c+"?cursor=@@", nil), 422)
 	must(t, w.parent1.do("GET", c+"?q=%25_%5C", nil), 200) // LIKE wildcards are escaped
+}
+
+func TestDiarySearchTreatsLikeWildcardsLiterally(t *testing.T) {
+	e := newEnv(t, nil)
+	w := e.world()
+	c := "/api/v1/children/" + w.child1.String()
+	cases := []struct {
+		name, query, matching, nearMiss string
+	}{
+		{name: "percent", query: "%", matching: "literal 50% complete", nearMiss: "literal 50x complete"},
+		{name: "underscore", query: "_", matching: "literal under_score", nearMiss: "literal underXscore"},
+		{name: "backslash", query: `\`, matching: `literal back\slash`, nearMiss: "literal backslash"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			want := e.entry(w.parent1, w.child1, "shared", tc.matching)
+			unwanted := e.entry(w.parent1, w.child1, "shared", tc.nearMiss)
+			var got []struct {
+				ID uuid.UUID `json:"id"`
+			}
+			path := c + "/diary-entries?q=" + url.QueryEscape(tc.query)
+			must(t, w.parent1.do("GET", path, nil), 200).json(t, &got)
+			if len(got) != 1 || got[0].ID != want {
+				t.Fatalf("literal search %q returned IDs %v; want only %s (exclude %s)", tc.query, got, want, unwanted)
+			}
+		})
+	}
 }
 
 func TestSessionsByRole(t *testing.T) {

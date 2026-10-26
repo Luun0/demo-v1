@@ -171,6 +171,26 @@ func TestInvalidRoleIsUnauthenticated(t *testing.T) {
 	}
 }
 
+func TestUnknownActionDefaultsToDeny(t *testing.T) {
+	cases := []struct {
+		name  string
+		actor *Actor
+		want  Decision
+	}{
+		{name: "guest", want: Unauthenticated},
+		{name: "admin", actor: &Actor{Role: domain.RoleAdmin}, want: Deny},
+		{name: "guardian", actor: &Actor{Role: domain.RoleParent}, want: Deny},
+		{name: "assigned specialist", actor: &Actor{Role: domain.RoleSpecialist}, want: Deny},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := Decide(tc.actor, Action("unknown:action"), Resource{Guardian: true, ActiveSpecialist: true}); got != tc.want {
+				t.Fatalf("unknown action decision = %s, want %s", got, tc.want)
+			}
+		})
+	}
+}
+
 func ExampleDecide() {
 	parent := &Actor{Role: domain.RoleParent}
 	fmt.Println(Decide(parent, ChildView, Resource{}))
