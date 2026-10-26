@@ -13,6 +13,9 @@ GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO ssp_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ssp_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO ssp_app;
 
+-- Managed Postgres providers require explicit membership before ownership transfer.
+GRANT ssp_audit_owner TO CURRENT_USER;
+GRANT CREATE ON SCHEMA public TO ssp_audit_owner;
 ALTER TABLE audit_events OWNER TO ssp_audit_owner;
 REVOKE UPDATE, DELETE ON audit_events FROM PUBLIC, ssp_app;
 GRANT SELECT, INSERT ON audit_events TO ssp_app;
@@ -31,5 +34,7 @@ BEGIN
 END;
 $$;
 ALTER FUNCTION prune_audit_events(timestamptz) OWNER TO ssp_audit_owner;
+REVOKE CREATE ON SCHEMA public FROM ssp_audit_owner;
+REVOKE ssp_audit_owner FROM CURRENT_USER;
 REVOKE ALL ON FUNCTION prune_audit_events(timestamptz) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION prune_audit_events(timestamptz) TO ssp_app;
