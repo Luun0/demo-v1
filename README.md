@@ -58,7 +58,7 @@ Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61)
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
 | Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242594381 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242594381) |
 | ZAP baseline | **Baseline completed: 0 FAIL, 5 WARN, 63 PASS** | [ZAP workflow run #40245962871](https://github.com/Luun0/demo-v1/actions/runs/40245962871); warnings remain to be triaged |
-| Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
+| Load test | **Latest paired local result: 22.84 ms p95 with the SSP-65 diary index; 23.94 ms without it** | k6 50 VU; 0 % failed requests and all 15,400 checks passed in both runs. Historical 6.19 ms result is retained separately; it was not reproduced under this run's conditions. ([loadtest details](loadtest/README.md#paired-index-check-26-october-2026)) |
 | Password reset | **Implemented** | `TestPasswordResetUniformResponseSingleUseAndExpiry`; web request/confirm pages |
 | Field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
 | Audit-table DB-role hardening | **Implemented** | `TestApplicationRoleCannotTamperWithAuditRows`; runtime API uses `ssp_app`, which has no UPDATE/DELETE privilege |

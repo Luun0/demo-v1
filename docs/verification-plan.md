@@ -165,3 +165,18 @@ Added table-driven boundary checks for diary validation (including the 10,000-ru
 | Diary list benchmarks | `go test ./tests/integration -run '^$' -bench '^BenchmarkDiaryListVisibilityFilter$' -benchmem` | Passed on Apple M2. guardian shared page: 118,446 ns/op; specialist all page: 236,811 ns/op; guardian search: 432,104 ns/op; specialist private filter: 228,836 ns/op. These are local diagnostic measurements, not a cross-machine performance claim. |
 
 The fresh base measurement was 84.9%, increasing to 85.0% after these focused tests. The older ~85.7% figure in section 11 was not reproduced by the current gate; it has not been presented as achieved. The additional tests protect security and validation edge cases, while the suite remains under its configured gates. No runtime, API, OpenAPI, route, or access-matrix change was made.
+
+## 14. Read-path index review (26 October 2026, SSP-65)
+
+Added `diary_entries_child_order_idx(child_id, observed_at DESC, id DESC)` for the specialist diary list, which returns shared and specialists-only entries and needs an ordered page across both visibility values. The existing `diary_entries_access_idx(child_id, visibility, observed_at DESC, id DESC)` continues to serve the parent-only shared list. The existing `support_sessions_child_idx(child_id, starts_at)` serves the session list; its plan still sorts the small child-scoped result by `starts_at, id`, so no duplicate session index was added. The migration intentionally makes no route or access-policy change.
+
+`TestDiaryAndSessionListPlansUseSupportingIndexes` builds 100,000 synthetic diary rows across 1,000 synthetic children and 10,000 synthetic sessions, runs `ANALYZE`, and records `EXPLAIN (ANALYZE, BUFFERS)` plans. The parent plan used `diary_entries_access_idx`; the specialist plan used `diary_entries_child_order_idx` without a sort; the session plan used `support_sessions_child_idx` for child filtering and retained a small in-memory sort.
+
+| Check | Command | Result |
+|---|---|---|
+| Full quality gate | `make check` | Passed: 85.0% total Go coverage, contract/layer/file-size gates green, frontend tests and build passed; initial JS gzip 186.9 KB / 200 KB. |
+| Explain plans | `go test ./tests/integration -run '^TestDiaryAndSessionListPlansUseSupportingIndexes$' -count=1 -v` | Passed on PostgreSQL 17 with the plan paths described above. |
+| Paired load test, no index | `BASE_URL=http://127.0.0.1:18095 k6 run --quiet loadtest/k6-diary.js` | 50 VU / 60 s, 207.0 req/s, p95 23.94 ms, 0% failed requests, 15,400/15,400 checks. |
+| Paired load test, index present | `BASE_URL=http://127.0.0.1:18095 k6 run --quiet loadtest/k6-diary.js` | 50 VU / 60 s, 207.5 req/s, p95 22.84 ms, 0% failed requests, 15,400/15,400 checks. |
+
+Both paired tests used the same local API binary, PostgreSQL 17 database, synthetic data and machine; only the diary ordering index differed. The previously recorded 6.19 ms p95 was not reproduced under this run's conditions, so it remains historical and is not presented as a directly comparable baseline. The index's measured paired result did not regress p95.
