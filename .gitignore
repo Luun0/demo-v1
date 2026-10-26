@@ -7,5 +7,4 @@ frontend/playwright-report/
 node_modules/
 .env.neon
 .admin-credentials
-.admin-credentials
 .playwright-cli/
