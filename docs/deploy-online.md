@@ -1,0 +1,72 @@
+# Deploy SEN Support online
+
+This guide prepares a public prototype deployment; it does not claim that a hosted URL exists. The app is still a university prototype and must use synthetic data only. Do not enter identifiable child or family data. Kazakhstan data-localisation, privacy/legal review, hosting region, and subprocessors remain open in [`kazakhstan-privacy-legal-checklist.md`](kazakhstan-privacy-legal-checklist.md).
+
+## Recommended starter: Render + Neon
+
+The checked-in [`render.yaml`](../render.yaml) defines one Render Docker web service. [`Dockerfile.online`](../Dockerfile.online) builds the Go API and React app into one image: nginx serves the SPA on port `10000` and proxies `/api/` to the Go process on `127.0.0.1:8081`. The browser talks to one HTTPS origin, so the HttpOnly refresh cookie and Origin/CSRF check stay same-origin. The web service has no publicly exposed API port.
+
+Render's Free web services require no payment for the starter flow, sleep after 15 minutes without inbound traffic, and take about a minute to start on the next request. Render says Free instances are for testing/hobby projects, not production; its own Free Postgres expires after 30 days, so this guide uses an external Neon database instead. See [Render free instance limits](https://render.com/docs/free) and [Render's first-deploy guide](https://render.com/docs/your-first-deploy).
+
+Neon's current Free plan includes 1 GB storage per project and 100 compute-hours per month; compute scales to zero after five minutes idle. Treat it as a prototype database, not a production datastore. See [Neon Free plan limits](https://github.com/neondatabase/website/blob/main/content/faqs/free-plan-limits-and-quotas.md) and [Neon connection pooling](https://neon.com/docs/connect/connection-pooling).
+
+### 1. Create the database and choose its region
+
+1. Create a Neon project. Choose a region only after resolving the hosting and data-localisation questions in the privacy checklist; place the database near the app service when that is legally acceptable.
+2. Create a database role dedicated to this app. Copy the pooled PostgreSQL connection string from Neon and keep `sslmode=require` in its query parameters.
+3. Keep the connection string private. Add it to a local env file outside the repository, for example `/secure/ssp-online.env`:
+
+   ```dotenv
+   DATABASE_URL=postgresql://APP_ROLE:URL_ENCODED_PASSWORD@NEON_HOST/DB_NAME?sslmode=require
+   JWT_SECRET=OUTPUT_OF_openssl_rand_-hex_32
+   COOKIE_SECURE=true
+   PASSWORD_RESET_LOG_LINK=false
+   AUTO_MIGRATE=false
+   API_ADDR=:8081
+   ```
+
+   Generate `JWT_SECRET` with `openssl rand -hex 32`. URL-encode reserved characters in the database password. Protect the file (`chmod 600 /secure/ssp-online.env`); do not put it in the checkout or commit it.
+
+### 2. Apply migrations and create the first administrator
+
+Build the exact online image from the repository root, then use its bundled API binary as a one-off command against Neon:
+
+```sh
+docker build -f Dockerfile.online -t sen-support-online .
+docker run --rm --env-file /secure/ssp-online.env --entrypoint /api sen-support-online migrate
+```
+
+Create a separate, temporary `/secure/ssp-admin.env` with `DATABASE_URL`, `JWT_SECRET`, `ADMIN_EMAIL`, and a strong unique `ADMIN_PASSWORD`, then run:
+
+```sh
+docker run --rm --env-file /secure/ssp-admin.env --entrypoint /api sen-support-online bootstrap-admin
+```
+
+Remove the temporary admin env file after success. The bootstrap command creates the first admin only. **Do not run `api seed` in the online environment.**
+
+### 3. Create the Render service
+
+1. Merge the deployment changes to the branch you intend to host, then connect `Luun0/demo-v1` to Render and create the Blueprint from `render.yaml`.
+2. Select an approved region. For the initial prototype, choose the Free plan.
+3. Enter `DATABASE_URL` and `JWT_SECRET` when Render asks for the `sync: false` variables. Set `CORS_ALLOWED_ORIGINS` to the exact service origin, for example `https://sen-support-platform.onrender.com` (scheme included, no trailing slash). After Render assigns the service URL, verify this value against it and update/redeploy if Render chose another hostname. For a custom domain, use that exact HTTPS origin instead.
+4. Keep `COOKIE_SECURE=true`, `PASSWORD_RESET_LOG_LINK=false`, `AUTO_MIGRATE=false`, `PORT=10000`, and `API_ADDR=:8081`. Do not add admin credentials to the running service.
+5. Wait for the `/healthz` check and open the Render URL. The first request after idle may wait about a minute while the free instance starts.
+
+The Nginx Content Security Policy allows same-origin scripts, styles, fonts, and API requests (`connect-src 'self'`). The early theme bootstrap is a same-origin external script, so the policy does not need `unsafe-inline` or a production-domain exception.
+
+### 4. Verify the deployed prototype
+
+Open the service URL and check `/healthz`, the landing page, login, logout, and refresh after a page reload. Confirm the response uses HTTPS and that `CORS_ALLOWED_ORIGINS` exactly matches the public origin. Use synthetic test accounts only. Render logs and database dashboards can contain operational metadata; avoid placing passwords, tokens, diary text, or real child data in logs or screenshots.
+
+## Fly.io alternative
+
+Fly.io can run the same `Dockerfile.online` and external PostgreSQL database. New Fly organizations require a payment card and usage is pay-as-you-go; it is not a guaranteed free hosting path. See the [Fly.io pricing and billing documentation](https://fly.io/docs/about/pricing/). Keeping one machine running avoids the free Render cold-start experience, but incurs ongoing compute charges.
+
+1. Install and authenticate `flyctl`, then run `fly launch` from the repository root. Choose a unique app name, do not provision a Fly database, and select a legally approved region. The Dockerfile exposes port `10000`; ensure the generated `fly.toml` uses `internal_port = 10000` and a `/healthz` check.
+2. Set the machine to stay running if you prefer no scale-to-zero: configure the HTTP service with `auto_stop_machines = "off"` and `min_machines_running = 1`. This has a cost; check Fly's calculator before deploying.
+3. Use the same Neon `DATABASE_URL`; run the migration and bootstrap commands above before serving real requests. Set runtime secrets with `fly secrets set`: `DATABASE_URL`, `JWT_SECRET`, and `CORS_ALLOWED_ORIGINS=https://<your-app>.fly.dev`. Keep `COOKIE_SECURE=true`, `PASSWORD_RESET_LOG_LINK=false`, `AUTO_MIGRATE=false`, `PORT=10000`, and `API_ADDR=:8081` in the app config.
+4. Deploy with `fly deploy`, then repeat the health, login, logout, and reload checks above. Fly supplies HTTPS at the app hostname; the browser still uses a single origin through nginx.
+
+## Before any real-data launch
+
+Free hosting is for evaluation only. Neither this guide nor a successful deployment is a security, legal, privacy, availability, backup, or data-localisation certification. Resolve the open decisions in the privacy checklist, select suitable paid services and regions, confirm retention/backups and incident response, and obtain qualified review before any real child or family information is entered.

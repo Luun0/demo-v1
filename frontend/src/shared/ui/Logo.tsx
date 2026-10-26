@@ -1,18 +1,23 @@
+import { useId } from 'react'
+
 export function Logo({ inverse = false, className = '' }: { inverse?: boolean; className?: string }) {
+  const id = useId()
   return (
-    <span className={`inline-flex items-center gap-3 font-semibold ${inverse ? 'text-on-brand' : 'text-brand-ink'} ${className}`}>
+    <span className={`logo inline-flex items-center gap-3 font-semibold ${inverse ? 'text-on-brand' : 'text-brand-ink'} ${className}`}>
       <svg
         role="img"
-        aria-label="SEN Support mark"
-        className="size-11 shrink-0 overflow-visible"
+        aria-labelledby={`${id}-title ${id}-desc`}
+        className="logo-mark size-11 shrink-0 overflow-visible"
         viewBox="0 0 48 48"
         fill="none"
       >
-        <path d="M8 33c1-9 5-15 12-17m8 0c7 2 11 8 12 17" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <title id={`${id}-title`}>SEN Support mark</title>
+        <desc id={`${id}-desc`}>Two caregivers gently cradle a child.</desc>
+        <path d="M8 33c0-9 3-15 10-19m12 0c7 4 10 10 10 19" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
         <circle cx="15" cy="12" r="5" fill="currentColor" />
         <circle cx="33" cy="12" r="5" fill="currentColor" />
-        <path d="M8 33c4 7 9 10 16 10s12-3 16-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-        <circle cx="24" cy="26" r="5" fill="var(--color-accent)" />
+        <path d="M8 32c4 8 9 12 16 12s12-4 16-12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <circle className="logo-child" cx="24" cy="26" r="5.5" fill="var(--color-accent)" />
       </svg>
       <span>SEN Support</span>
     </span>

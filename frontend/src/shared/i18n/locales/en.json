@@ -3,6 +3,13 @@
     "brand": "SEN Support",
     "skipToContent": "Skip to content",
     "language": "Language",
+    "theme": {
+      "label": "Theme",
+      "switchLabel": "Theme: {{current}}. Switch to {{next}}",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
     "loading": "Loading…",
     "save": "Save",
     "cancel": "Cancel",
@@ -49,6 +56,11 @@
   },
   "landing": {
     "eyebrow": "Support platform for families",
+    "navPeople": "Who it's for",
+    "navWorkflow": "How it works",
+    "navPrivacy": "Privacy",
+    "rolesEyebrow": "A shared circle of care",
+    "rolesTitle": "Different roles. One child-centred plan.",
     "title": "Coordinate a child's support together — privately",
     "text": "Parents and assigned specialists share a schedule and a development diary. Access is enforced by the server; administrators never see diary text.",
     "previewLabel": "A connected support team",
@@ -82,7 +94,9 @@
     "privacyText": "The server checks role, family relationship, assignment, and diary visibility on every request. Administrators cannot read diary text.",
     "finalTitle": "Coordinate support in one place",
     "finalText": "Create an account to get started with the SEN Support workspace.",
-    "footerNote": "University prototype · synthetic data only"
+    "footerNote": "University prototype · synthetic data only",
+    "footerExplore": "Explore",
+    "footerAccount": "Your account"
   },
   "auth": {
     "storyEyebrow": "Support, thoughtfully connected",

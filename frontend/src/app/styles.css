@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --color-brand: #17695e;
@@ -32,8 +34,10 @@
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+    color-scheme: dark;
     --color-brand: #235f55;
     --color-brand-strong: #39796e;
     --color-brand-ink: #b8f1df;
@@ -59,7 +63,6 @@
     --shadow-soft: 0 14px 32px rgba(0, 0, 0, 0.22);
     --shadow-lift: 0 20px 42px rgba(0, 0, 0, 0.32);
     --shadow-panel: 0 28px 64px rgba(0, 0, 0, 0.4);
-  }
 }
 
 html { font-family: var(--font-sans); font-size: 112.5%; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -85,10 +88,15 @@ body { background: var(--color-canvas); color: var(--color-ink); line-height: 1.
 .surface-lift:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: color-mix(in srgb, var(--color-brand) 45%, var(--color-line)); }
 .surface-lift:active { transform: translateY(-1px) scale(0.995); }
 .brand-mark-drift { animation: mark-breathe 5s ease-in-out infinite; }
+.logo-mark { transform-origin: center; transition: transform 220ms var(--ease-out-soft); }
+.logo:hover .logo-mark, .logo:focus-visible .logo-mark { transform: rotate(-3deg) scale(1.04); }
+.logo-child { transform-box: fill-box; transform-origin: center; animation: child-welcome 900ms var(--ease-out-soft) both; }
+@keyframes child-welcome { 0% { transform: scale(.7); } 68% { transform: scale(1.12); } 100% { transform: scale(1); } }
 .intro-loader { animation: intro-exit 420ms var(--ease-out-soft) 820ms both; }
 .intro-counter { animation: count-roll 500ms var(--ease-out-soft) both; }
 .chapter-rule { border-color: color-mix(in srgb, var(--color-brand) 24%, var(--color-line)); }
 .landing-watermark::before { content: 'SEN SUPPORT'; display: block; color: color-mix(in srgb, var(--color-brand) 6%, var(--color-canvas)); font-size: clamp(5rem, 13vw, 12rem); font-weight: 700; letter-spacing: -0.09em; line-height: 1; white-space: nowrap; }
+.footer-watermark::before { content: 'SEN SUPPORT'; display: block; color: color-mix(in srgb, var(--color-brand) 5%, var(--color-canvas)); font-size: clamp(4rem, 11vw, 10rem); font-weight: 700; letter-spacing: -0.1em; line-height: 1; white-space: nowrap; }
 tbody tr { transition: background-color 160ms ease; }
 tbody tr:hover { background: color-mix(in srgb, var(--color-brand) 6%, var(--color-surface)); }
 .field-control { transition: border-color 180ms ease, box-shadow 180ms var(--ease-out-soft), background-color 180ms ease; }
@@ -103,7 +111,7 @@ tbody tr:hover { background: color-mix(in srgb, var(--color-brand) 6%, var(--col
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   html { scroll-behavior: auto; }
-  .page-enter, .stagger-list > *, .count-pop, .skeleton-shimmer, .brand-mark-drift, .intro-loader, .intro-counter { animation: none; }
+  .page-enter, .stagger-list > *, .count-pop, .skeleton-shimmer, .brand-mark-drift, .logo-child, .intro-loader, .intro-counter { animation: none; }
   .intro-loader { display: none; }
   .surface-lift, .surface-lift:hover, .surface-lift:active { transition: none; transform: none; }
 }

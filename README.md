@@ -78,7 +78,7 @@ The sample is small and self-selected, so the results are **preliminary and not 
 |---|---|---|
 | Frontend | React 19, TypeScript (strict), Vite 8, Tailwind CSS 4, React Router 7, TanStack Query, openapi-fetch (types generated from the contract), i18next, react-hook-form + zod, Radix Dialog | [ADR-0002 FSD](docs/decisions/ADR-0002-frontend-fsd.md) |
 | Backend | Go 1.26, `net/http` ServeMux, Clean Architecture (domain → application → adapters), pgx v5 with hand-written parameterised SQL | [ADR-0001](docs/decisions/ADR-0001-backend-clean-architecture.md), [ADR-0003](docs/decisions/ADR-0003-sql-layer.md) |
-| Database | PostgreSQL 17, embedded migrations | hosting not decided (SF-05) |
+| Database | PostgreSQL 17, embedded migrations | prototype hosting options documented; actual host and region not selected (SF-05) |
 | Auth | Argon2id; 15-min JWT (HS256, pinned alg/iss/aud) in memory; opaque refresh token in HttpOnly SameSite=Strict cookie with rotation and reuse detection; CSRF double-submit + Origin check | [ADR-0004](docs/decisions/ADR-0004-tokens-and-csrf.md) |
 | Quality | golangci-lint (depguard enforces layers), eslint-plugin-boundaries (enforces FSD), Vitest + Testing Library + MSW, Playwright + axe, k6, govulncheck, npm audit, gitleaks, Trivy, ZAP | [verification plan](docs/verification-plan.md) |
 
@@ -112,6 +112,10 @@ make dev               # db (127.0.0.1 only) → migrate → api → web
 make seed              # synthetic demo users and one child (PRV-08)
 open http://localhost:8081
 ```
+
+### Online prototype hosting
+
+The single-origin Docker image and Render + Neon setup are prepared in [docs/deploy-online.md](docs/deploy-online.md); no public deployment or URL exists yet. Resolve the hosting region and privacy questions in [the legal checklist](docs/kazakhstan-privacy-legal-checklist.md) before deploying anything beyond synthetic data.
 
 ### Without Docker
 

@@ -7,7 +7,7 @@ describe('Logo', () => {
   it('exposes a named SVG mark and keeps the wordmark as text', () => {
     renderWithProviders(<Logo />)
 
-    expect(screen.getByRole('img', { name: 'SEN Support mark' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'SEN Support mark Two caregivers gently cradle a child.' })).toBeInTheDocument()
     expect(screen.getByText('SEN Support')).toBeInTheDocument()
   })
 

@@ -1,0 +1,28 @@
+# One public service: nginx serves the SPA and proxies same-origin /api requests to Go.
+FROM golang:1.26-alpine AS api-build
+WORKDIR /src
+COPY backend/go.mod backend/go.sum ./backend/
+WORKDIR /src/backend
+RUN go mod download
+COPY backend/ .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/api ./cmd/api
+
+FROM node:22-alpine AS web-build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci --ignore-scripts
+COPY frontend/ ./
+RUN npm run build && npm run size:bundle
+
+FROM nginxinc/nginx-unprivileged:1.30.6-alpine3.24
+USER root
+RUN apk upgrade --no-cache
+COPY --from=api-build /out/api /api
+COPY --from=web-build /app/dist /usr/share/nginx/html
+COPY deploy/nginx-online.conf /etc/nginx/conf.d/default.conf
+COPY deploy/online-entrypoint.sh /usr/local/bin/online-entrypoint
+RUN chmod 755 /usr/local/bin/online-entrypoint
+USER 101
+ENV PORT=10000 API_ADDR=:8081
+EXPOSE 10000
+ENTRYPOINT ["/usr/local/bin/online-entrypoint"]

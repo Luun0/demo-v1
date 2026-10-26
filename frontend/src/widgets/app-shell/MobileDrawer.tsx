@@ -4,6 +4,7 @@ import { NavLink } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { LogoutButton } from '@/features/auth-logout'
 import { LanguageSwitch } from '@/features/language-switch'
+import { ThemeSwitch } from '@/features/theme-switch'
 import type { NavItem } from '@/shared/config/nav'
 import { Icon, Logo, type IconName } from '@/shared/ui'
 
@@ -43,6 +44,7 @@ export function MobileDrawer({ open, onOpenChange, items }: { open: boolean; onO
             </ul>
           </nav>
           <div className="mt-6 space-y-3 border-t border-on-brand/20 pt-4">
+            <ThemeSwitch dark />
             <LanguageSwitch dark />
             <LogoutButton className="w-full justify-start text-on-brand hover:bg-on-brand/10 hover:text-on-brand" />
           </div>
