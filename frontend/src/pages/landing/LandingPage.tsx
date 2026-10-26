@@ -23,7 +23,7 @@ export function LandingPage() {
           <Link to="/login" className="rounded-full px-4 py-2 font-medium text-brand hover:bg-brand/5 dark:text-brand-strong">{t('ctaLogin')}</Link>
         </div>
       </header>
-      <main id="main" className="mx-auto max-w-7xl px-5 pb-14">
+      <main id="main" className="page-enter mx-auto max-w-7xl px-5 pb-14">
         <section className="grid items-center gap-10 py-12 md:grid-cols-[1.2fr_.8fr] md:py-20">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold text-brand-strong dark:text-white"><span className="size-2 rounded-full bg-accent" />{t('eyebrow')}</p>
@@ -34,10 +34,10 @@ export function LandingPage() {
               <Link to="/login" className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-5 font-semibold text-ink hover:bg-muted">{t('ctaLogin')}</Link>
             </div>
           </div>
-          <div className="relative mx-auto grid aspect-square w-full max-w-sm place-items-center rounded-[2.5rem] bg-gradient-to-br from-brand/10 via-accent/10 to-brand/5">
+          <div className="relative mx-auto grid aspect-square w-full max-w-sm place-items-center rounded-[2.5rem] border border-line bg-gradient-to-br from-brand/10 via-accent/10 to-brand/5 shadow-soft">
             <span className="absolute right-6 top-8 size-20 rounded-full bg-accent/15" aria-hidden="true" />
             <span className="absolute bottom-8 left-5 size-12 rounded-full bg-brand/10" aria-hidden="true" />
-            <span className="grid size-56 place-items-center bg-accent text-white shadow-soft dark:text-brand [clip-path:polygon(50%_0,93%_25%,93%_75%,50%_100%,7%_75%,7%_25%)] sm:size-64">
+            <span className="brand-mark-drift grid size-56 place-items-center bg-accent text-white shadow-soft dark:text-brand [clip-path:polygon(50%_0,93%_25%,93%_75%,50%_100%,7%_75%,7%_25%)] sm:size-64">
               <Icon name="flower" className="size-32" />
             </span>
             <span className="absolute bottom-5 right-5 rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-medium shadow-soft">{t('common:demoNotice')}</span>
@@ -46,7 +46,7 @@ export function LandingPage() {
 
         <section aria-label={t('workspaceTitle')} className="grid gap-4 md:grid-cols-3">
           {features.map(({ key, icon }) => (
-            <article key={key} className="rounded-2xl border border-line bg-surface p-6 shadow-soft">
+            <article key={key} className="surface-lift rounded-2xl border border-line bg-surface p-6 shadow-soft">
               <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-brand/10 text-brand"><Icon name={icon} /></span>
               <h2 className="text-lg font-semibold">{t(`${key}t`)}</h2>
               <p className="mt-2 text-ink-soft">{t(`${key}d`)}</p>
@@ -58,7 +58,7 @@ export function LandingPage() {
           <h2 className="mb-6 text-2xl font-semibold">{t('workspaceTitle')}</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {roles.map((role, index) => (
-              <article key={role} className="rounded-2xl border border-line bg-surface p-6 shadow-soft">
+              <article key={role} className="surface-lift rounded-2xl border border-line bg-surface p-6 shadow-soft">
                 <span className="text-sm font-semibold text-brand-strong">0{index + 1}</span>
                 <h3 className="mt-3 text-lg font-semibold">{t(`${role}Title`)}</h3>
                 <p className="mt-2 text-ink-soft">{t(`${role}Text`)}</p>
@@ -75,7 +75,7 @@ export function LandingPage() {
         <section className="grid gap-10 py-16 md:grid-cols-2">
           <div>
             <h2 className="text-2xl font-semibold">{t('whyTitle')}</h2>
-            <details className="mt-5 rounded-2xl border border-line bg-surface p-5 shadow-soft">
+            <details className="surface-lift mt-5 rounded-2xl border border-line bg-surface p-5 shadow-soft">
               <summary className="cursor-pointer font-semibold marker:text-accent">{t('whyTitle')}</summary>
               <p className="mt-3 leading-relaxed text-ink-soft">{t('whyText')}</p>
             </details>
@@ -90,7 +90,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="grid items-center gap-5 rounded-2xl border border-line bg-surface p-7 shadow-soft md:grid-cols-[auto_1fr] md:p-10">
+        <section className="surface-lift grid items-center gap-5 rounded-2xl border border-line bg-surface p-7 shadow-soft md:grid-cols-[auto_1fr] md:p-10">
           <span className="grid size-14 place-items-center rounded-2xl bg-brand text-white"><Icon name="shield" className="size-7" /></span>
           <div><h2 className="text-xl font-semibold">{t('privacyTitle')}</h2><p className="mt-2 text-ink-soft">{t('privacyText')}</p></div>
         </section>

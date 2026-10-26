@@ -40,7 +40,7 @@ export function DiaryFeed({ childId, viewer }: { childId: string; viewer: User }
       {feed.isPending ? <Loading /> : feed.isError ? <ErrorState error={feed.error} onRetry={() => void feed.refetch()} /> : total === 0 ? (
         <EmptyState>{t('empty')}</EmptyState>
       ) : (
-        <ul className="space-y-3">
+        <ul className="stagger-list space-y-3">
           {feed.data.pages.flatMap((p) => p.items).map((e) => (
             <li key={e.id}>
               <EntryCard

@@ -26,13 +26,14 @@ export function AppShell() {
   const bottom = items.slice(0, 3)
   const active = [...items].reverse().find((item) => pathname === item.to || pathname.startsWith(`${item.to}/`))
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex min-h-12 items-center gap-3 rounded-r-xl border-l-4 px-3 py-3 transition-colors motion-reduce:transition-none ${isActive ? 'border-accent bg-white/10 font-semibold text-white' : 'border-transparent text-white/80 hover:bg-white/10 hover:text-white'}`
+    `relative flex min-h-12 items-center gap-3 rounded-r-xl px-4 py-3 transition-colors before:absolute before:bottom-3 before:left-0 before:top-3 before:w-1 before:origin-center before:rounded-full before:bg-accent before:transition-transform before:duration-200 motion-reduce:before:transition-none motion-reduce:transition-none ${isActive ? 'before:scale-y-100 bg-white/10 font-semibold text-white' : 'before:scale-y-0 text-white/80 hover:bg-white/10 hover:text-white'}`
   return (
     <div className="min-h-dvh bg-canvas text-ink md:flex">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:p-3">
         {t('skipToContent')}
       </a>
-      <aside className="hidden w-[260px] shrink-0 flex-col bg-brand px-4 py-6 text-on-brand md:flex">
+      <aside className="relative hidden w-[260px] shrink-0 flex-col overflow-hidden bg-brand px-4 py-6 text-on-brand md:flex">
+        <span aria-hidden="true" className="pointer-events-none absolute -left-20 top-36 size-64 rounded-full border border-white/10" />
         <Logo inverse className="mb-10 px-2" />
         <nav aria-label={t('nav:main')} className="flex-1">
           <ul className="space-y-1">
@@ -61,7 +62,7 @@ export function AppShell() {
             </span>
           </div>
         </header>
-        <main id="main" tabIndex={-1} className="mx-auto min-w-0 max-w-7xl px-4 py-6 pb-24 md:px-8 md:py-8 md:pb-8">
+        <main id="main" tabIndex={-1} className="page-enter mx-auto min-w-0 max-w-7xl px-4 py-7 pb-24 md:px-8 md:py-10 md:pb-10">
           <Outlet />
         </main>
       </div>

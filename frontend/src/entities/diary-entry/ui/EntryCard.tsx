@@ -8,7 +8,7 @@ import { Badge } from '@/shared/ui'
 export function EntryCard({ entry, actions }: { entry: DiaryEntry; actions?: ReactNode }) {
   const { t, i18n } = useTranslation('diary')
   return (
-    <article className="rounded-2xl border border-line bg-surface p-5 shadow-soft" aria-labelledby={`entry-${entry.id}`}>
+    <article className="surface-lift rounded-2xl border border-line bg-surface p-5 shadow-soft" aria-labelledby={`entry-${entry.id}`}>
       <header className="mb-2 flex flex-wrap items-center gap-2">
         <h3 id={`entry-${entry.id}`} className="font-semibold text-ink">
           {t(`types.${entry.type}`)}

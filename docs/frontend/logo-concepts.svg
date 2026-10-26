@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 300" role="img" aria-labelledby="title desc">
+  <title id="title">SEN Support logo concepts</title>
+  <desc id="desc">Four calm geometric marks: a caregiver cradle, a bloom, a growing shelter, and connected circles.</desc>
+  <style>
+    .card { fill: #fff; stroke: #e4ece9; stroke-width: 2; }
+    .ink { color: #306a63; stroke: currentColor; }
+    .coral { fill: #dc7651; }
+    .label { fill: #1a2732; font: 600 18px Inter, sans-serif; }
+    .sub { fill: #637278; font: 14px Inter, sans-serif; }
+  </style>
+  <rect class="card" x="8" y="8" width="268" height="284" rx="28"/>
+  <rect class="card" x="288" y="8" width="268" height="284" rx="28"/>
+  <rect class="card" x="568" y="8" width="268" height="284" rx="28"/>
+  <rect class="card" x="848" y="8" width="264" height="284" rx="28"/>
+  <g class="ink" fill="none" stroke-width="5" stroke-linecap="round" transform="translate(118 45) scale(1.2)">
+    <path d="M8 33c1-9 5-15 12-17m8 0c7 2 11 8 12 17"/><circle cx="15" cy="12" r="5" fill="currentColor"/><circle cx="33" cy="12" r="5" fill="currentColor"/><path d="M8 33c4 7 9 10 16 10s12-3 16-10"/><circle class="coral" cx="24" cy="26" r="5" stroke="none"/>
+  </g>
+  <g class="ink" fill="none" stroke-width="5" stroke-linecap="round" transform="translate(380 45) scale(1.2)">
+    <circle cx="24" cy="24" r="4" fill="currentColor"/><circle cx="24" cy="8" r="7"/><circle cx="39" cy="20" r="7"/><circle cx="33" cy="38" r="7"/><circle cx="15" cy="38" r="7"/><circle cx="9" cy="20" r="7"/>
+  </g>
+  <g class="ink" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" transform="translate(660 45) scale(1.2)">
+    <path d="M24 44S5 33 5 18A11 11 0 0 1 24 9a11 11 0 0 1 19 9c0 15-19 26-19 26Z"/><path d="M24 34c-1-10 4-16 12-19m-12 19c-5-7-9-9-14-10"/><path d="M24 23c3-7 7-9 12-9"/>
+  </g>
+  <g class="ink" fill="none" stroke-width="5" transform="translate(934 55) scale(1.2)">
+    <circle cx="13" cy="24" r="10"/><circle cx="35" cy="13" r="10"/><circle cx="35" cy="35" r="10"/><path d="m22 20 4-3m-4 10 4 3" stroke-linecap="round"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="label" x="142" y="190">Cradle connection</text><text class="sub" x="142" y="218">Selected</text>
+    <text class="label" x="422" y="190">Shared bloom</text><text class="sub" x="422" y="218">Care through growth</text>
+    <text class="label" x="702" y="190">Growing shelter</text><text class="sub" x="702" y="218">Privacy and progress</text>
+    <text class="label" x="980" y="190">Linked circles</text><text class="sub" x="980" y="218">Connected support</text>
+  </g>
+</svg>
