@@ -3,10 +3,6 @@ import { createBrowserRouter, type RouteObject } from 'react-router'
 import { Loading } from '@/shared/ui'
 import { AppShell } from '@/widgets/app-shell'
 import { LandingPage } from '@/pages/landing'
-import { LoginPage } from '@/pages/login'
-import { ForgotPasswordPage } from '@/pages/forgot-password'
-import { ResetPasswordPage } from '@/pages/reset-password'
-import { NotFoundPage } from '@/pages/not-found'
 import { GuestOnly, RequireAuth, RequireRole } from './guards'
 
 function lazyPage<K extends string>(load: () => Promise<Record<K, ComponentType>>, name: K) {
@@ -20,12 +16,12 @@ function lazyPage<K extends string>(load: () => Promise<Record<K, ComponentType>
 
 export const routes: RouteObject[] = [
   { path: '/', element: <LandingPage /> },
-  { path: '/forgot-password', element: <ForgotPasswordPage /> },
-  { path: '/reset-password', element: <ResetPasswordPage /> },
+  { path: '/forgot-password', element: lazyPage(() => import('@/pages/forgot-password'), 'ForgotPasswordPage') },
+  { path: '/reset-password', element: lazyPage(() => import('@/pages/reset-password'), 'ResetPasswordPage') },
   {
     element: <GuestOnly />,
     children: [
-      { path: '/login', element: <LoginPage /> },
+      { path: '/login', element: lazyPage(() => import('@/pages/login'), 'LoginPage') },
       { path: '/register', element: lazyPage(() => import('@/pages/register'), 'RegisterPage') },
     ],
   },
@@ -63,12 +59,12 @@ export const routes: RouteObject[] = [
               { path: 'audit', element: lazyPage(() => import('@/pages/admin-audit'), 'AdminAuditPage') },
             ],
           },
-          { path: '*', element: <NotFoundPage /> },
+          { path: '*', element: lazyPage(() => import('@/pages/not-found'), 'NotFoundPage') },
         ],
       },
     ],
   },
-  { path: '*', element: <NotFoundPage /> },
+  { path: '*', element: lazyPage(() => import('@/pages/not-found'), 'NotFoundPage') },
 ]
 
 export const createRouter = () => createBrowserRouter(routes)
