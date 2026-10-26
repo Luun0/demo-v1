@@ -2,7 +2,7 @@
 
 A privacy-conscious web platform for coordinating support sessions and sharing development observations between a child's parents/guardians and assigned specialists.
 
-> **Status: university MVP prototype (25 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and locally verified as described below. `pre-defense-1` is the baseline submission tag; these follow-up changes are not included in that tag. Field-level encryption, container security scans and usability evaluation remain open.
+> **Status: university MVP prototype (26 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and verified as described below. `pre-defense-1` is the baseline submission tag; later follow-up work is not included in that tag. Field-level encryption, ZAP warning triage, and usability evaluation remain open.
 
 - **Repository:** https://github.com/AknurOE/sen-support-platform
 - **YouTrack project:** https://honchikon1.youtrack.cloud/projects/SSP
@@ -46,7 +46,7 @@ Full objectives and success criteria: [docs/proposal.md](docs/proposal.md).
 
 ## Current status
 
-Status on 25 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57 and SSP-58). Every "done" row links to the command or test that proves it; see [verification-plan §11](docs/verification-plan.md#11-results--25-october-2026-ssp-58).
+Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61). Every "done" row links to the command, test, or CI run that proves it; see [verification-plan §12](docs/verification-plan.md#12-follow-up-verification-26-october-2026-ssp-61).
 
 | Area | State | Evidence |
 |---|---|---|
@@ -55,8 +55,8 @@ Status on 25 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57 and SSP-5
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
-| Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242105118 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242105118) |
-| ZAP baseline | **Not run** | No verified nightly scan result yet |
+| Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242594381 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242594381) |
+| ZAP baseline | **Baseline completed: 0 FAIL, 5 WARN, 63 PASS** | [ZAP workflow run #40245962871](https://github.com/Luun0/demo-v1/actions/runs/40245962871); warnings remain to be triaged |
 | Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
 | Password reset | **Implemented** | `TestPasswordResetUniformResponseSingleUseAndExpiry`; web request/confirm pages |
 | Field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
@@ -184,7 +184,7 @@ Shared: literature review, system comparison, README and consistency review. Mil
 ## Known limitations and next steps
 
 - Rate limiting is in-memory per instance; a shared store is needed for more than one API replica.
-- Docker images, compose and nginx were built and started locally with synthetic credentials in an isolated Compose project. Trivy and ZAP scans remain unverified.
+- Docker images, compose and nginx were built and started locally with synthetic credentials in an isolated Compose project. Trivy passed in CI. The first ZAP baseline completed with 0 FAIL, 5 WARN, and 63 PASS; its warnings need triage and another scan before release.
 - Not implemented (documented as planned): field-level encryption.
 - Password reset uses a one-hour, single-use token stored only as a hash. Local Compose mode writes active reset links to API logs when `PASSWORD_RESET_LOG_LINK=true`; view them with `docker compose logs api` and treat those logs as credentials. Set the flag to `false` outside local development until a mail delivery provider is configured. This log mode requires `COOKIE_SECURE=false`.
 - Audit retention runs when an operator or scheduler invokes `api retention`; default age is 365 days (`AUDIT_RETENTION_DAYS`).
@@ -223,6 +223,6 @@ The authors have not approved an open-source license. The repository remains all
 | 1 Contract + ADRs | SSP-51-contract-adrs | Implemented; OpenAPI v0.2, ADR-0001…0008 |
 | 2–3 Backend | SSP-52-backend-access, SSP-53-backend-diary | Implemented; Clean Architecture API, access/IDOR tests |
 | 4 Frontend | SSP-54-frontend-fsd | Implemented; FSD client on the real API, ADR-0009 |
-| 5 QA/DevOps | SSP-55-qa-devops | CI and container configuration implemented; image/Trivy/ZAP execution not yet verified |
+| 5 QA/DevOps | SSP-55-qa-devops | CI and container configuration implemented; Trivy passed and the first ZAP baseline completed with warnings on 26 October |
 | 6 Docs | SSP-56-docs | Implemented; traceability and local verification results documented |
 | 7 Follow-up gaps | SSP-57, SSP-58 | Password reset and owner-only diary delete UI implemented; rate-limit store and external mail delivery remain out of scope |
