@@ -180,3 +180,14 @@ Added `diary_entries_child_order_idx(child_id, observed_at DESC, id DESC)` for t
 | Paired load test, index present | `BASE_URL=http://127.0.0.1:18095 k6 run --quiet loadtest/k6-diary.js` | 50 VU / 60 s, 207.5 req/s, p95 22.84 ms, 0% failed requests, 15,400/15,400 checks. |
 
 Both paired tests used the same local API binary, PostgreSQL 17 database, synthetic data and machine; only the diary ordering index differed. The previously recorded 6.19 ms p95 was not reproduced under this run's conditions, so it remains historical and is not presented as a directly comparable baseline. The index's measured paired result did not regress p95.
+
+## 15. Frontend route performance (26 October 2026, SSP-66)
+
+Moved login, forgot-password, reset-password, and not-found screens behind the existing route-level lazy-loading helper. The not-found screen used by the role guard is lazy-loaded through `Suspense` as well. Route paths, role checks, page behavior, FSD layers, and dependencies are unchanged.
+
+| Check | Command | Result |
+|---|---|---|
+| Full quality gate | `make check` | Passed; FSD boundaries and size check green. Initial JS gzip 151.3 KB / 200 KB, down 35.6 KB (19.0%) from 186.9 KB. |
+| Browser E2E and accessibility | `VITE_API_PROXY=http://127.0.0.1:18086 npm run test:e2e` (run from `frontend/`) | 6/6 Playwright tests passed; axe reported 0 violations across checked guest, parent, specialist, admin, and mobile screens. |
+
+No UI behavior, navigation, route, security, or role-visibility logic was changed. No animation or other dependency was added.

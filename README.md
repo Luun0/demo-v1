@@ -55,6 +55,7 @@ Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61)
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
 | Backend statement coverage | **85.0% locally after SSP-64 test additions** | `make check` on 26 October 2026; fresh base measurement was 84.9%. The previously documented ~85.7% was not reproduced; see [verification-plan §13](docs/verification-plan.md#13-test-and-coverage-hardening-26-october-2026-ssp-64). |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
+| Initial frontend JS | **151.3 KB gzip / 200 KB budget** | `make check` after SSP-66 route splitting; 35.6 KB (19.0%) below the previous 186.9 KB. FSD lint and e2e axe remain green; see [verification-plan §15](docs/verification-plan.md#15-frontend-route-performance-26-october-2026-ssp-66). |
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
 | Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242594381 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242594381) |
 | ZAP baseline | **Baseline completed: 0 FAIL, 5 WARN, 63 PASS** | [ZAP workflow run #40245962871](https://github.com/Luun0/demo-v1/actions/runs/40245962871); warnings remain to be triaged |
