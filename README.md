@@ -4,7 +4,7 @@ A privacy-conscious web platform for coordinating support sessions and sharing d
 
 > **Status: university MVP prototype (26 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and verified as described below. `pre-defense-1` is the baseline submission tag; later follow-up work is not included in that tag. Field-level encryption, ZAP warning triage, and usability evaluation remain open.
 
-- **Repository:** https://github.com/AknurOE/sen-support-platform
+- **Repository:** https://github.com/Luun0/demo-v1
 - **YouTrack project:** https://honchikon1.youtrack.cloud/projects/SSP
 - **Supervisor:** A. K. Makatov
 

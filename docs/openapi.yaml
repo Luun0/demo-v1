@@ -10,8 +10,7 @@ info:
     specialists_only. Admin responses never include diary content. Guest can only register and sign in. Errors use
     application/problem+json (RFC 9457). Refresh tokens travel only in an HttpOnly cookie (ADR-0004).
   license:
-    name: All rights reserved (TODO)
-    url: https://example.invalid/license-todo
+    name: All rights reserved (see repository LICENSE)
 servers:
 - url: /api/v1
   description: API base path; deployment host is not specified in source documents.

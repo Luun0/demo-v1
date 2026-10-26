@@ -2,6 +2,8 @@
 
 **Submission:** tag `pre-defense-1`
 
+> **Frozen snapshot:** this summary describes the contents and implementation state at the `pre-defense-1` tag. The backend API, PostgreSQL integration, and backend tests were delivered in later milestones; follow-up work SSP-57/58 added further functionality. See the current status in [README.md](../README.md).
+
 ## Included work
 
 - Project proposal, requirements, and SRS with priorities and acceptance criteria.
@@ -13,7 +15,7 @@
 
 ## Current limitations
 
-- Backend API, database integration, and backend tests are not implemented.
+- At this snapshot, the backend API, database integration, and backend tests were not implemented.
 - The survey has seven responses and its recruitment method is not recorded in the available materials.
 - Usability evaluation has not been conducted.
 - Consent, legal classification, retention, and hosting decisions remain open.

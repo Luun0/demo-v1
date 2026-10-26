@@ -6,7 +6,7 @@
 
 ## Repository and tracking
 
-- Repository: https://github.com/AknurOE/sen-support-platform (`main` is the reviewed baseline).
+- Repository: https://github.com/Luun0/demo-v1 (authoritative repository URL).
 - YouTrack board: https://honchikon1.youtrack.cloud/projects/SSP/agiles/204-1/current (task details require an authenticated session).
 - Workflow: one branch per task using the task ID; commits and PRs reference the ID; another team member reviews; link the PR in YouTrack; mark done only when acceptance criteria are met.
 - Submission tags: `pre-defense-1`, `pre-defense-2`, `final-pre-defense`; never move a submitted tag.
@@ -90,4 +90,4 @@ January (winter exam session) is kept light.
 
 ## Pre-defense 1 status and limitations
 
-The public repository shows a `main` branch, three contributors, PR #1 merged on 22 October, and security/privacy documentation. The current code README says only draft domain models exist; API, database, and business logic are not implemented. This is acceptable for the analysis/design pre-defense but must be stated in the submission summary. Supervisor review was received on 23 October 2026 and is logged with decisions in `supervisor-feedback.md`. Following SF-10, every member commits at least weekly, every PR is reviewed by another member before merge, and the YouTrack ID is used in branch and PR names. Confirm YouTrack task IDs, assignees, priorities, due dates, and acceptance criteria directly in the board before tagging.
+**Historical status note (22–23 October 2026):** this assessment describes the repository before the backend milestones were completed. At that snapshot, the pre-defense baseline was still primarily analysis, design, and a frontend prototype. The Go API, PostgreSQL integration, and backend tests were implemented in later backend milestones and follow-up work; see the current status in [README.md](../README.md). Supervisor review was received on 23 October 2026 and is logged with decisions in `supervisor-feedback.md`. Following SF-10, every member commits at least weekly, every PR is reviewed by another member before merge, and the YouTrack ID is used in branch and PR names. Confirm YouTrack task IDs, assignees, priorities, due dates, and acceptance criteria directly in the board before tagging.
