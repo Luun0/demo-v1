@@ -16,14 +16,14 @@ export function Dialog({ open, onOpenChange, title, description, children }: Dia
   return (
     <RD.Root open={open} onOpenChange={onOpenChange}>
       <RD.Portal>
-        <RD.Overlay className="fixed inset-0 z-40 bg-black/50" />
+        <RD.Overlay className="fixed inset-0 z-40 bg-overlay backdrop-blur-sm" />
         <RD.Content
-          className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[min(92vw,36rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl bg-surface p-6 text-ink shadow-xl"
+          className="dialog-surface fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[min(92vw,36rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[1.25rem] border border-line bg-surface p-6 text-ink shadow-panel"
           {...(description ? {} : { 'aria-describedby': undefined })}
         >
           <div className="mb-4 flex items-start justify-between gap-4">
             <RD.Title className="text-xl font-semibold">{title}</RD.Title>
-            <RD.Close className="min-h-11 min-w-11 rounded-lg hover:bg-muted" aria-label={t('close')}>
+            <RD.Close className="min-h-11 min-w-11 rounded-xl transition-[background-color] hover:bg-muted focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none" aria-label={t('close')}>
               <span aria-hidden="true">×</span>
             </RD.Close>
           </div>

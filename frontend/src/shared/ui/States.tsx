@@ -44,18 +44,18 @@ type BadgeTone = 'neutral' | 'brand' | 'warn' | 'danger' | 'success' | 'accent'
 
 export function Badge({ children, tone = 'neutral' }: { children: ReactNode; tone?: BadgeTone }) {
   const tones: Record<BadgeTone, string> = {
-    neutral: 'bg-muted text-ink', brand: 'bg-brand/15 text-brand-strong',
+    neutral: 'bg-muted text-ink', brand: 'bg-brand/15 text-brand-ink',
     warn: 'bg-warn/20 text-ink', danger: 'bg-danger/15 text-danger',
-    success: 'bg-brand text-white', accent: 'bg-accent/15 text-ink',
+    success: 'bg-brand text-on-brand', accent: 'bg-accent/15 text-accent-ink',
   }
   return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-medium ${tones[tone]}`}>{children}</span>
 }
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
   return (
-    <div className="page-enter mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
+    <div className="page-enter mb-9 flex flex-wrap items-end justify-between gap-4 border-b chapter-rule pb-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{title}</h1>
+        <h1 className="max-w-4xl text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-4xl lg:text-[2.75rem]">{title}</h1>
         {subtitle && <p className="mt-2 max-w-2xl text-base text-ink-soft">{subtitle}</p>}
       </div>
       {actions}

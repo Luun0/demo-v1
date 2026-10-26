@@ -26,14 +26,14 @@ export function AppShell() {
   const bottom = items.slice(0, 3)
   const active = [...items].reverse().find((item) => pathname === item.to || pathname.startsWith(`${item.to}/`))
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `relative flex min-h-12 items-center gap-3 rounded-r-xl px-4 py-3 transition-colors before:absolute before:bottom-3 before:left-0 before:top-3 before:w-1 before:origin-center before:rounded-full before:bg-accent before:transition-transform before:duration-200 motion-reduce:before:transition-none motion-reduce:transition-none ${isActive ? 'before:scale-y-100 bg-white/10 font-semibold text-white' : 'before:scale-y-0 text-white/80 hover:bg-white/10 hover:text-white'}`
+    `relative flex min-h-12 items-center gap-3 rounded-xl px-4 py-3 transition-[background-color,transform] duration-200 ease-out-soft after:absolute after:right-4 after:size-1.5 after:rounded-full after:bg-accent after:transition-transform after:duration-200 motion-reduce:after:transition-none motion-reduce:transition-none ${isActive ? 'after:scale-100 bg-on-brand/15 font-semibold text-on-brand' : 'after:scale-0 text-on-brand hover:translate-x-0.5 hover:bg-on-brand/10'}`
   return (
     <div className="min-h-dvh bg-canvas text-ink md:flex">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:p-3">
         {t('skipToContent')}
       </a>
       <aside className="relative hidden w-[260px] shrink-0 flex-col overflow-hidden bg-brand px-4 py-6 text-on-brand md:flex">
-        <span aria-hidden="true" className="pointer-events-none absolute -left-20 top-36 size-64 rounded-full border border-white/10" />
+        <span aria-hidden="true" className="pointer-events-none absolute -left-20 top-36 size-64 rounded-full border border-on-brand/15" />
         <Logo inverse className="mb-10 px-2" />
         <nav aria-label={t('nav:main')} className="flex-1">
           <ul className="space-y-1">
@@ -47,7 +47,7 @@ export function AppShell() {
             ))}
           </ul>
         </nav>
-        <LogoutButton className="mt-6 w-full justify-start text-white hover:bg-white/10 hover:text-white" />
+        <LogoutButton className="mt-6 w-full justify-start text-on-brand hover:bg-on-brand/10 hover:text-on-brand" />
       </aside>
       <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-30 flex min-h-16 items-center gap-3 border-b border-line bg-surface/95 px-4 py-2 backdrop-blur md:px-8">
@@ -70,7 +70,7 @@ export function AppShell() {
         <ul className="grid grid-cols-4">
           {bottom.map((item) => (
             <li key={item.to}>
-              <NavLink to={item.to} end={item.end ?? false} className="flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-center text-xs aria-[current=page]:font-semibold aria-[current=page]:text-brand-strong">
+              <NavLink to={item.to} end={item.end ?? false} className="flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-center text-xs aria-[current=page]:font-semibold aria-[current=page]:text-brand-ink">
                 <Icon name={navIcons[item.labelKey] ?? 'home'} className="size-5" /><span>{t(item.labelKey)}</span>
               </NavLink>
             </li>

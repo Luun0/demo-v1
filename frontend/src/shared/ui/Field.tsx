@@ -1,7 +1,7 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react'
 import { cn } from '@/shared/lib'
 
-const control = 'mt-1 block w-full min-h-11 rounded-xl border border-line bg-surface px-3 py-2 text-ink transition-colors focus-visible:border-brand-strong aria-[invalid=true]:border-danger motion-reduce:transition-none'
+const control = 'field-control mt-1 block w-full min-h-11 rounded-[0.875rem] border border-line bg-surface px-3 py-2 text-ink placeholder:text-ink-soft/75 focus-visible:border-brand-strong aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70 motion-reduce:transition-none'
 
 interface Base {
   label: string

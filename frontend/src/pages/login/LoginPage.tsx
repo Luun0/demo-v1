@@ -8,9 +8,9 @@ export function LoginPage() {
   return (
     <AuthLayout title={t('loginTitle')}>
       <LoginForm />
-      <p className="mt-4 text-center"><Link to="/forgot-password" className="font-medium text-brand-strong underline">{t('forgotLink')}</Link></p>
+      <p className="mt-4 text-center"><Link to="/forgot-password" className="font-medium text-brand-ink underline">{t('forgotLink')}</Link></p>
       <p className="mt-6 text-center">
-        {t('noAccount')} <Link to="/register" className="font-medium text-brand-strong underline">{t('submitRegister')}</Link>
+        {t('noAccount')} <Link to="/register" className="font-medium text-brand-ink underline">{t('submitRegister')}</Link>
       </p>
     </AuthLayout>
   )

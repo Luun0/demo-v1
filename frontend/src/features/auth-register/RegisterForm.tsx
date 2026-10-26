@@ -39,7 +39,7 @@ export function RegisterForm() {
       <div role="status" className="rounded-lg bg-brand/10 p-4">
         <p>{t('registered')}</p>
         {done === 'specialist' && <p className="mt-2">{t('specialistPending')}</p>}
-        <Link to="/login" className="mt-3 inline-block font-medium text-brand-strong underline">{t('submitLogin')}</Link>
+        <Link to="/login" className="mt-3 inline-block font-medium text-brand-ink underline">{t('submitLogin')}</Link>
       </div>
     )
 

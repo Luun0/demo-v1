@@ -1,6 +1,6 @@
 export function Logo({ inverse = false, className = '' }: { inverse?: boolean; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-3 font-semibold ${inverse ? 'text-white' : 'text-brand-strong'} ${className}`}>
+    <span className={`inline-flex items-center gap-3 font-semibold ${inverse ? 'text-on-brand' : 'text-brand-ink'} ${className}`}>
       <svg
         role="img"
         aria-label="SEN Support mark"
