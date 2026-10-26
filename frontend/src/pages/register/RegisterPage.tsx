@@ -9,7 +9,7 @@ export function RegisterPage() {
     <AuthLayout title={t('registerTitle')}>
       <RegisterForm />
       <p className="mt-6 text-center">
-        {t('haveAccount')} <Link to="/login" className="font-medium text-brand-strong underline">{t('submitLogin')}</Link>
+        {t('haveAccount')} <Link to="/login" className="font-medium text-brand-ink underline">{t('submitLogin')}</Link>
       </p>
     </AuthLayout>
   )

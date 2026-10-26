@@ -26,12 +26,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <div className="pointer-events-none fixed bottom-20 right-4 z-50 flex flex-col gap-2 md:bottom-4">
         <div role="status" aria-live="polite">
           {items.filter((i) => i.tone === 'success').map((i) => (
-            <p key={i.id} className="rounded-lg bg-ink px-4 py-3 text-surface shadow-lg">{i.text}</p>
+            <p key={i.id} className="toast-surface rounded-xl border border-line bg-ink-panel px-4 py-3 text-panel-ink shadow-panel">{i.text}</p>
           ))}
         </div>
         <div role="alert" aria-live="assertive">
           {items.filter((i) => i.tone === 'error').map((i) => (
-            <p key={i.id} className="rounded-lg bg-danger px-4 py-3 text-white shadow-lg">{i.text}</p>
+            <p key={i.id} className="toast-surface rounded-xl border border-danger-solid/30 bg-danger-solid px-4 py-3 text-on-brand shadow-panel">{i.text}</p>
           ))}
         </div>
       </div>

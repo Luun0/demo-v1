@@ -32,7 +32,7 @@ export function ConfirmResetForm() {
     }
   })
   if (!token) return <p role="alert" className="rounded-lg bg-danger/10 p-3 text-danger">{t('resetInvalid')}</p>
-  if (done) return <div role="status" className="space-y-3 rounded-xl bg-brand/10 p-4"><p>{t('resetDone')}</p><Link to="/login" className="font-medium text-brand-strong underline">{t('backToLogin')}</Link></div>
+  if (done) return <div role="status" className="space-y-3 rounded-xl bg-brand/10 p-4"><p>{t('resetDone')}</p><Link to="/login" className="font-medium text-brand-ink underline">{t('backToLogin')}</Link></div>
   const passwordError = formState.errors.password?.message
   const confirmError = formState.errors.confirm?.message
   return (

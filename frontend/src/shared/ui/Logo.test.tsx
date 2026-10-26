@@ -14,6 +14,6 @@ describe('Logo', () => {
   it('preserves the inverse treatment for brand surfaces', () => {
     const { container } = renderWithProviders(<Logo inverse />)
 
-    expect(container.firstElementChild).toHaveClass('text-white')
+    expect(container.firstElementChild).toHaveClass('text-on-brand')
   })
 })

@@ -8,6 +8,6 @@ export function ForgotPasswordPage() {
   return <AuthLayout title={t('forgotTitle')}>
     <p className="mb-5 text-sm text-ink-soft">{t('forgotText')}</p>
     <RequestResetForm />
-    <p className="mt-6 text-center"><Link to="/login" className="font-medium text-brand-strong underline">{t('backToLogin')}</Link></p>
+    <p className="mt-6 text-center"><Link to="/login" className="font-medium text-brand-ink underline">{t('backToLogin')}</Link></p>
   </AuthLayout>
 }

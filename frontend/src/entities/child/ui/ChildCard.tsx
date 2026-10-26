@@ -13,7 +13,7 @@ export function ChildCard({ child, extra }: { child: Child; extra?: ReactNode })
       </h3>
       <p className="text-ink-soft">{t('born', { date: formatDate(child.birth_date, i18n.language) })}</p>
       {extra}
-      <Link to={`/app/children/${child.id}`} className="mt-3 inline-flex min-h-11 items-center font-medium text-brand-strong underline">
+      <Link to={`/app/children/${child.id}`} className="mt-3 inline-flex min-h-11 items-center font-medium text-brand-ink underline">
         {t('open')} <span className="sr-only">: {child.first_name}</span>
       </Link>
     </article>
