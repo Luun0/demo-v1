@@ -66,6 +66,17 @@
     "title": "Support — together",
     "text": "Parents and assigned specialists share a schedule and a development diary. Access is enforced by the server; administrators never see diary text.",
     "previewLabel": "A connected support team",
+    "preview": {
+      "eyebrow": "Interface preview · fictional data",
+      "child": "Mira · example",
+      "visibility": "Visible to family",
+      "sessionHeading": "Next session",
+      "sessionTitle": "Learning session",
+      "sessionTime": "Example · 10:30",
+      "sessionStatus": "Scheduled",
+      "observationHeading": "Observation",
+      "observation": "Mira returned to the activity after a short break and finished the puzzle."
+    },
     "exampleEyebrow": "Fictional example",
     "exampleTitle": "How one observation helps a team coordinate",
     "exampleIntro": "This illustrates a workflow; it is not a story about a real child.",

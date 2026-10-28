@@ -10,6 +10,33 @@ const roles = ['parent', 'specialist', 'admin'] as const
 const steps = ['step1', 'step2', 'step3'] as const
 type ProgressStyle = CSSProperties & { '--progress': number }
 
+function InterfacePreview() {
+  const { t } = useTranslation('landing')
+  return (
+    <article className="rounded-2xl border border-line bg-surface p-5 text-ink shadow-panel sm:p-7" aria-label={t('preview.eyebrow')}>
+      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-5">
+        <div>
+          <p className="text-sm font-semibold text-brand-ink">{t('preview.eyebrow')}</p>
+          <h2 className="mt-1 text-2xl font-semibold tracking-tight">{t('preview.child')}</h2>
+        </div>
+        <span className="rounded-full bg-muted px-4 py-2 text-sm font-medium text-ink-soft">{t('preview.visibility')}</span>
+      </header>
+      <section className="grid gap-3 border-b border-line py-5 sm:grid-cols-[8rem_1fr]" aria-labelledby="preview-session">
+        <h3 id="preview-session" className="font-semibold text-ink-soft">{t('preview.sessionHeading')}</h3>
+        <div className="flex items-start gap-3">
+          <span aria-hidden="true" className="mt-2 size-2.5 shrink-0 rounded-full bg-accent" />
+          <div><p className="text-lg font-semibold">{t('preview.sessionTitle')}</p><p className="mt-1 text-ink-soft">{t('preview.sessionTime')}</p></div>
+          <span className="ml-auto rounded-full bg-muted px-3 py-1.5 text-sm font-medium text-brand-ink">{t('preview.sessionStatus')}</span>
+        </div>
+      </section>
+      <section className="grid gap-3 pt-5 sm:grid-cols-[8rem_1fr]" aria-labelledby="preview-observation">
+        <h3 id="preview-observation" className="font-semibold text-ink-soft">{t('preview.observationHeading')}</h3>
+        <p className="text-lg leading-relaxed">{t('preview.observation')}</p>
+      </section>
+    </article>
+  )
+}
+
 function trackGlow(event: ReactPointerEvent<HTMLElement>) {
   if (event.pointerType !== 'mouse') return
   const bounds = event.currentTarget.getBoundingClientRect()
@@ -124,19 +151,7 @@ export function LandingPage() {
             </div>
           </div>
           <div className="relative z-10 md:pl-5">
-            <div className="relative overflow-hidden rounded-[1.5rem] bg-ink-panel p-6 text-panel-ink shadow-panel sm:p-9">
-              <div className="flex items-start justify-between gap-4 border-b border-panel-ink/20 pb-5">
-                <div><p className="text-xs font-semibold uppercase tracking-[0.14em] text-lagoon">{t('previewLabel')}</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">{t('workspaceTitle')}</h2></div>
-                <span className="grid size-11 place-items-center rounded-full bg-sun text-ink-panel"><Icon name="people" className="size-6" /></span>
-              </div>
-              <div className="mt-7 grid grid-cols-[2.5rem_1fr] gap-x-4">
-                <div className="flex flex-col items-center"><span className="grid size-9 place-items-center rounded-full border border-lagoon/60 text-sm font-semibold text-lagoon">01</span><span className="my-2 min-h-12 w-px flex-1 bg-panel-ink/30" /><span className="grid size-9 place-items-center rounded-full bg-accent text-sm font-semibold text-on-accent">02</span><span className="my-2 min-h-12 w-px flex-1 bg-panel-ink/30" /><span className="grid size-9 place-items-center rounded-full border border-sun/60 text-sm font-semibold text-sun">03</span></div>
-                <div className="space-y-4">
-                  {roles.map((role, index) => <div key={role} className={`min-h-[5.3rem] border-b border-panel-ink/20 pb-4 ${index === 2 ? 'border-0' : ''}`}><p className="text-xs text-panel-ink/65">0{index + 1}</p><h3 className="mt-1 font-semibold">{t(`${role}Title`)}</h3><p className="text-sm text-panel-ink/75">{index === 0 ? t('parentText') : index === 1 ? t('specialistText') : t('adminText')}</p></div>)}
-                </div>
-              </div>
-              <div className="mt-3 flex items-center justify-between border-t border-panel-ink/20 pt-4 text-xs text-panel-ink/70"><span>{t('footerNote')}</span><span className="size-2 rounded-full bg-sun" aria-hidden="true" /></div>
-            </div>
+            <InterfacePreview />
             <span aria-hidden="true" className="absolute -bottom-5 -left-5 -z-10 size-24 border border-brand/30" />
           </div>
         </section>

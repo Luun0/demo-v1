@@ -22,7 +22,7 @@ export function HomeSummary({ role }: { role: Role }) {
     <ul className="stagger-list grid gap-4 sm:grid-cols-2">
       {q.data.map((c) => (
         <li key={c.id}>
-          <ChildCard child={c} extra={role !== 'admin' && <DiaryCount child={c} />} />
+          <ChildCard child={c} role={role} extra={role !== 'admin' && <DiaryCount child={c} />} />
         </li>
       ))}
     </ul>
