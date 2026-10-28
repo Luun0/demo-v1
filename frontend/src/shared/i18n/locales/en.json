@@ -246,6 +246,32 @@
     "statusCol": "Status",
     "actions": "Actions"
   },
+  "supportChat": {
+    "launcher": "FAQ_SEN",
+    "close": "Close",
+    "title": "FAQ_SEN",
+    "subtitle": "Answers about using the platform",
+    "welcome": "Hello! I can help you understand SEN Support features.",
+    "privacy": "This is a help guide, not an AI advisor. Please do not share personal or medical information.",
+    "inputLabel": "Your question",
+    "placeholder": "For example: who can see the diary?",
+    "send": "Send question",
+    "suggestions": "Common questions",
+    "fallback": "This guide does not have an exact answer yet. Try asking about a child profile, specialists, schedule, diary, or access. For an account-specific question, contact your platform administrator.",
+    "faq": {
+      "about": { "question": "What is the platform for?", "answer": "SEN Support helps parents and assigned specialists coordinate a child's support: maintain a profile, view schedules, and use the diary within their granted access." },
+      "roles": { "question": "How do the roles differ?", "answer": "A parent manages the child's profile and team access. A specialist sees only assigned children and the sections available to their role. An administrator manages users and audit records; the diary is not available to administrators." },
+      "registration": { "question": "How do I register?", "answer": "On the registration page, choose Parent or Specialist and complete the form. Administrator accounts cannot be created through public registration. A specialist account appears in the assignment list only after an administrator approves it." },
+      "approval": { "question": "Why is a specialist missing from the list?", "answer": "Only active specialist accounts approved by an administrator are available for assignment. Ask an administrator to check the account status and approval, and make sure you are signed in as a parent with access to this child." },
+      "password": { "question": "How do I reset my password?", "answer": "On the sign-in page, choose Forgot password and submit a request. Reset requires an email link, but an email provider is not configured for the public version yet. If no email arrives, contact your administrator; never send your password in chat." },
+      "profile": { "question": "How do I add a child profile?", "answer": "Sign in as a parent and open the child profile creation flow from the overview. Enter only necessary information, and use synthetic data in the demo environment." },
+      "team": { "question": "How do I assign a specialist?", "answer": "Open the child's profile, select the Team tab, choose an available specialist, and confirm. If the person is missing, ask an administrator to check their account and status." },
+      "schedule": { "question": "Where can I see the schedule?", "answer": "Open the child's profile and select Schedule. It is available to the parent and specialists assigned to that child." },
+      "diary": { "question": "Who can see the diary?", "answer": "The diary is available to the parent and assigned specialist within their access to the child. Platform administrators cannot see it. Avoid recording information that is not needed for support." },
+      "privacy": { "question": "How is data access protected?", "answer": "Access is scoped by role and assignment to a specific child. The team and access log help show who is authorized to work with the data. Never share your password or send personal data in this chat." },
+      "medical": { "question": "Can I get medical advice here?", "answer": "No. This guide only explains how to use the platform and cannot assess a child's condition. For medical or crisis support, contact a qualified professional or a local support service." }
+    }
+  },
   "errors": {
     "notFoundTitle": "Page not found",
     "notFoundText": "The page does not exist or you do not have access.",

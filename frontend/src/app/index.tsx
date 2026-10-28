@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
 import { refreshSession } from '@/shared/api'
 import { initI18n } from '@/shared/i18n'
+import { SupportAssistant } from '@/widgets/support-assistant'
 import { makeQueryClient, Providers } from './providers'
 import { createRouter } from './router'
 import './styles.css'
@@ -15,7 +16,10 @@ async function start() {
   createRoot(root).render(
     <StrictMode>
       <Providers client={makeQueryClient()}>
-        <RouterProvider router={createRouter()} />
+        <>
+          <RouterProvider router={createRouter()} />
+          <SupportAssistant />
+        </>
       </Providers>
     </StrictMode>,
   )
