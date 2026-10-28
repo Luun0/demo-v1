@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api, unwrap } from '@/shared/api'
-import { Button, Dialog, Input, useNotify } from '@/shared/ui'
+import { Button, Dialog, Input, PrototypeNotice, useNotify } from '@/shared/ui'
 import { childKeys } from '@/entities/child'
 
 export const POLICY_VERSION = '2026-10'
@@ -41,6 +41,7 @@ export function CreateChildDialog() {
       <Button onClick={() => setOpen(true)}>{t('dashboard:addChild')}</Button>
       <Dialog open={open} onOpenChange={setOpen} title={t('dashboard:addChild')}>
         <form onSubmit={handleSubmit((v) => m.mutate(v))} noValidate>
+          <PrototypeNotice className="mb-4" />
           <Input label={t('firstName')} error={fe.first_name && t('common:required')} {...register('first_name')} />
           <Input label={t('lastName')} error={fe.last_name && t('common:required')} {...register('last_name')} />
           <Input label={t('birthDate')} type="date" error={fe.birth_date && t('common:required')} {...register('birth_date')} />

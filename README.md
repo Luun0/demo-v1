@@ -2,7 +2,7 @@
 
 A privacy-conscious web platform for coordinating support sessions and sharing development observations between a child's parents/guardians and assigned specialists.
 
-> **Status: university MVP prototype (26 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and verified as described below. `pre-defense-1` is the baseline submission tag; later follow-up work is not included in that tag. Field-level encryption, ZAP warning triage, and usability evaluation remain open.
+> **Status: university MVP prototype with a public preview (28 October 2026).** The Go API, PostgreSQL integration, authorization rules, audit trail and React client on the real API are implemented and verified as described below. `pre-defense-1` is the baseline submission tag; later follow-up work is not included in that tag. The public preview is for evaluation with fictional data only; it is not approved for real child or family data. Field-level encryption, ZAP warning triage, legal/privacy review, password-reset email delivery, and usability evaluation remain open.
 
 - **Repository:** https://github.com/Luun0/demo-v1
 - **YouTrack project:** https://honchikon1.youtrack.cloud/projects/SSP
@@ -55,10 +55,11 @@ Status on 26 October 2026 (baseline SSP-50…SSP-56, follow-ups SSP-57…SSP-61)
 | Access matrix / IDOR tests (run first in CI) | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint` |
 | Web client on the real API (React 19, FSD, kz/ru/en) | **Implemented** | `make frontend-test`, `npm run test:e2e` (Playwright + axe: 6/6, 0 violations) |
 | Docker images, compose, nginx with CSP | **Build and runtime verified locally** with synthetic credentials and a fresh isolated database | Compose API and web health checks passed |
+| Public preview | **Available for evaluation only** | [SEN Support on Render](https://sen-support-platform.onrender.com/); Render Free service in Ohio, connected to the `main` branch. It may sleep when idle; this is not a production availability commitment. |
 | Trivy image scan | **Passed in CI (26 October 2026)** | [CI run #40242594381 — build and both image scans passed](https://github.com/Luun0/demo-v1/actions/runs/40242594381) |
 | ZAP baseline | **Baseline completed: 0 FAIL, 5 WARN, 63 PASS** | [ZAP workflow run #40245962871](https://github.com/Luun0/demo-v1/actions/runs/40245962871); warnings remain to be triaged |
 | Load test | Run locally | k6 50 VU: p95 6.19 ms, 0 % errors ([loadtest/](loadtest/README.md)) |
-| Password reset | **Implemented** | `TestPasswordResetUniformResponseSingleUseAndExpiry`; web request/confirm pages |
+| Password reset | **Token and confirmation flow implemented; email delivery open** | Requests use a generic response and one-time expiring tokens; no public email provider is configured, so users cannot receive reset links yet. |
 | Field-level encryption | **Planned / open** | [ADR-0007](docs/decisions/ADR-0007-scope-assumptions.md) |
 | Audit-table DB-role hardening | **Implemented** | `TestApplicationRoleCannotTamperWithAuditRows`; runtime API uses `ssp_app`, which has no UPDATE/DELETE privilege |
 | Parent-owned diary-entry deletion | **Implemented** | `TestAccessMatrix100PercentCells`, `TestCrossFamilyIDORReturns404OnEveryEndpoint`, `TestDiaryDeletionOwnerOnlyAndAudited` |
@@ -78,7 +79,7 @@ The sample is small and self-selected, so the results are **preliminary and not 
 |---|---|---|
 | Frontend | React 19, TypeScript (strict), Vite 8, Tailwind CSS 4, React Router 7, TanStack Query, openapi-fetch (types generated from the contract), i18next, react-hook-form + zod, Radix Dialog | [ADR-0002 FSD](docs/decisions/ADR-0002-frontend-fsd.md) |
 | Backend | Go 1.26, `net/http` ServeMux, Clean Architecture (domain → application → adapters), pgx v5 with hand-written parameterised SQL | [ADR-0001](docs/decisions/ADR-0001-backend-clean-architecture.md), [ADR-0003](docs/decisions/ADR-0003-sql-layer.md) |
-| Database | PostgreSQL 17, embedded migrations | prototype hosting options documented; actual host and region not selected (SF-05) |
+| Database | PostgreSQL 17, embedded migrations; Neon `production` branch | The configured Neon project is in Ohio (`us-east-2`). This location has not been approved for real child data; resolve localization and transfer questions before any such use. |
 | Auth | Argon2id; 15-min JWT (HS256, pinned alg/iss/aud) in memory; opaque refresh token in HttpOnly SameSite=Strict cookie with rotation and reuse detection; CSRF double-submit + Origin check | [ADR-0004](docs/decisions/ADR-0004-tokens-and-csrf.md) |
 | Quality | golangci-lint (depguard enforces layers), eslint-plugin-boundaries (enforces FSD), Vitest + Testing Library + MSW, Playwright + axe, k6, govulncheck, npm audit, gitleaks, Trivy, ZAP | [verification plan](docs/verification-plan.md) |
 
@@ -115,7 +116,7 @@ open http://localhost:8081
 
 ### Online prototype hosting
 
-The single-origin Docker image and Render + Neon setup are prepared in [docs/deploy-online.md](docs/deploy-online.md); no public deployment or URL exists yet. Resolve the hosting region and privacy questions in [the legal checklist](docs/kazakhstan-privacy-legal-checklist.md) before deploying anything beyond synthetic data.
+The public preview runs as a single-origin Docker service on Render with Neon in Ohio. Deployment details and current limitations are in [docs/deploy-online.md](docs/deploy-online.md). The site is reachable, but legal/privacy review is incomplete: use fictional data only and resolve the hosting region and privacy questions in [the legal checklist](docs/kazakhstan-privacy-legal-checklist.md) before considering any real-data use.
 
 ### Without Docker
 
@@ -126,7 +127,7 @@ cd backend && go run ./cmd/api migrate && go run ./cmd/api seed && go run ./cmd/
 cd frontend && npm ci && npm run dev    # http://localhost:5174, /api proxied to :8080
 ```
 
-Demo accounts (synthetic): `admin@`, `specialist1@`, `specialist2@`, `parent1@`, `parent2@example.test`, password `Synthetic-Demo-2026`. Production admins are created with `api bootstrap-admin`, never via public sign-up.
+Local Compose seed accounts (synthetic only): `admin@`, `specialist1@`, `specialist2@`, `parent1@`, `parent2@example.test`, password `Synthetic-Demo-2026`. These are not public-service credentials. Production admins are created with `api bootstrap-admin`, never via public sign-up.
 
 ### Tests and checks
 

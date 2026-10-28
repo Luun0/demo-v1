@@ -1,6 +1,6 @@
 # Deploy SEN Support online
 
-This guide prepares a public prototype deployment; it does not claim that a hosted URL exists. The app is still a university prototype and must use synthetic data only. Do not enter identifiable child or family data. Kazakhstan data-localisation, privacy/legal review, hosting region, and subprocessors remain open in [`kazakhstan-privacy-legal-checklist.md`](kazakhstan-privacy-legal-checklist.md).
+The public preview is available at [sen-support-platform.onrender.com](https://sen-support-platform.onrender.com/). As of 28 October 2026, its Render Docker web service deploys from `Luun0/demo-v1` `main` in Ohio on the Free plan and connects to the Neon `production` branch. This is an evaluation deployment of a university prototype, **not a production service**. Use fictional data only; do not enter identifiable child or family data. Kazakhstan data-localisation, privacy/legal review, retention, backups, support ownership, and subprocessors remain open in [`kazakhstan-privacy-legal-checklist.md`](kazakhstan-privacy-legal-checklist.md).
 
 ## Recommended starter: Render + Neon
 
@@ -50,19 +50,19 @@ docker run --rm --env-file /secure/ssp-admin.env --entrypoint /api sen-support-o
 
 Remove the temporary admin env file after success. The bootstrap command creates the first admin only. **Do not run `api seed` in the online environment.**
 
-### 3. Create the Render service
+### 3. Inspect or recreate the Render service
 
-1. Merge the deployment changes to the branch you intend to host, then connect `Luun0/demo-v1` to Render and create the Blueprint from `render.yaml`.
-2. Select an approved region. For the initial prototype, choose the Free plan.
-3. Enter the restricted `ssp_app` direct TLS connection string as `DATABASE_URL` when Render asks for the `sync: false` value. The Blueprint generates a separate random `JWT_SECRET` and derives `CORS_ALLOWED_ORIGINS` from Render's own HTTPS service URL. If you later attach a custom domain, add that exact HTTPS origin to `CORS_ALLOWED_ORIGINS` and redeploy.
+1. The existing service is connected to `Luun0/demo-v1` `main`; do not create a duplicate. If recreating it, connect the repository and create the Blueprint from `render.yaml`.
+2. The current service is in Ohio on the Free plan. Do not infer that this region is legally suitable; confirm location and cross-border transfer requirements before any real data is considered.
+3. Keep the restricted `ssp_app` TLS connection as `DATABASE_URL`. The Blueprint generates a separate `JWT_SECRET` and derives `CORS_ALLOWED_ORIGINS` from Render's HTTPS service URL. If you attach a custom domain, add that exact HTTPS origin and redeploy.
 4. Keep `COOKIE_SECURE=true`, `PASSWORD_RESET_LOG_LINK=false`, `AUTO_MIGRATE=false`, `PORT=10000`, and `API_ADDR=:8081`. Do not add admin credentials to the running service.
-5. Wait for the `/healthz` check and open the Render URL. The first request after idle may wait about a minute while the free instance starts.
+5. Confirm the `/healthz` check and open the Render URL. The first request after idle may wait about a minute while the free instance starts.
 
 The Nginx Content Security Policy allows same-origin scripts, styles, fonts, and API requests (`connect-src 'self'`). The early theme bootstrap is a same-origin external script, so the policy does not need `unsafe-inline` or a production-domain exception.
 
 ### 4. Verify the deployed prototype
 
-Open the service URL and check `/healthz`, the landing page, login, logout, and refresh after a page reload. Confirm the response uses HTTPS and that `CORS_ALLOWED_ORIGINS` exactly matches the public origin. Use synthetic test accounts only. Render logs and database dashboards can contain operational metadata; avoid placing passwords, tokens, diary text, or real child data in logs or screenshots.
+Open the public preview and check `/healthz`, the landing page, login, logout, and refresh after a page reload. Confirm the response uses HTTPS and that `CORS_ALLOWED_ORIGINS` exactly matches the public origin. Use local synthetic test accounts only; local seed credentials do not imply public accounts exist. Password reset email delivery is not configured, so public users cannot currently receive recovery links. Render logs and database dashboards can contain operational metadata; avoid placing passwords, tokens, diary text, or real child data in logs or screenshots.
 
 ## Fly.io alternative
 

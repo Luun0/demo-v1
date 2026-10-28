@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitch } from '@/features/language-switch'
 import { ThemeSwitch } from '@/features/theme-switch'
-import { Icon, Logo } from '@/shared/ui'
+import { Icon, Logo, PrototypeNotice } from '@/shared/ui'
 
 const features = ['f1', 'f2', 'f3'] as const
 const roles = ['parent', 'specialist', 'admin'] as const
@@ -57,32 +57,6 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
   return <div ref={ref} className={`scroll-reveal ${shown ? 'is-revealed' : ''} ${className}`}>{children}</div>
 }
 
-function CountUp({ value, label }: { value: number; label: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    const node = ref.current
-    if (!node) return
-    let frame = 0
-    const show = () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setCount(value); return }
-      const start = performance.now()
-      const tick = (now: number) => {
-        const progress = Math.min(1, (now - start) / 620)
-        setCount(Math.round(value * (1 - (1 - progress) ** 3)))
-        if (progress < 1) frame = requestAnimationFrame(tick)
-      }
-      frame = requestAnimationFrame(tick)
-    }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) { show(); observer.disconnect() }
-    }, { threshold: 0.5 })
-    observer.observe(node)
-    return () => { observer.disconnect(); cancelAnimationFrame(frame) }
-  }, [value])
-  return <span className="block"><span ref={ref} aria-hidden="true" className="count-pop tabular-nums">{count}</span><span className="sr-only">{value} {label}</span></span>
-}
-
 function WordReveal({ text }: { text: string }) {
   const words = text.split(' ')
   return <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft md:text-xl">
@@ -122,6 +96,10 @@ export function LandingPage() {
         </details>
       </header>
 
+      <div className="mx-auto max-w-[90rem] px-5 md:px-10">
+        <PrototypeNotice />
+      </div>
+
       <main id="main" className="mx-auto max-w-[90rem] px-5 pb-16 md:px-10">
         <section className="relative grid min-h-[min(76vh,54rem)] items-center gap-9 border-b chapter-rule py-10 md:grid-cols-[1.05fr_.95fr] md:py-14">
           <span aria-hidden="true" className="landing-watermark pointer-events-none absolute bottom-0 right-0 translate-x-[7%] translate-y-[24%] select-none" />
@@ -131,6 +109,7 @@ export function LandingPage() {
             <WordReveal text={t('text')} />
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link to="/register" className="group inline-flex min-h-12 items-center gap-3 rounded-lg bg-accent px-5 font-semibold text-on-accent shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-lift active:translate-y-px active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none">{t('ctaRegister')}<Icon name="arrow" className="size-5 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none" /></Link>
+              <a href="#example" className="inline-flex min-h-12 items-center rounded-lg border border-line bg-surface px-4 font-semibold text-brand-ink transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-soft focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transform-none motion-reduce:transition-none">{t('ctaExample')}</a>
               <span className="text-sm text-ink-soft">{t('common:demoNotice')}</span>
             </div>
           </div>
@@ -176,11 +155,21 @@ export function LandingPage() {
         </Reveal>
 
         <Reveal>
-          <section aria-label={t('statsTitle')} className="grid gap-8 rounded-[1.5rem] bg-ink-panel px-6 py-9 text-panel-ink shadow-panel md:grid-cols-[.8fr_2fr] md:items-center md:px-10 md:py-11">
-            <div><p className="text-sm font-semibold uppercase tracking-[0.14em] text-sun">{t('statsEyebrow')}</p><h2 className="mt-3 text-2xl font-semibold tracking-tight">{t('statsTitle')}</h2></div>
-            <div className="grid grid-cols-3 gap-4">
-              {[{ value: 2, key: 'statOne' }, { value: 1, key: 'statTwo' }, { value: 3, key: 'statThree' }].map(({ value, key }) => <div key={key} className="border-l border-panel-ink/25 pl-4"><p className="text-4xl font-semibold tracking-[-0.06em] text-lagoon sm:text-5xl"><CountUp value={value} label={t(`${key}Label`)} /></p><p aria-hidden="true" className="mt-2 text-sm leading-snug text-panel-ink/75">{t(`${key}Label`)}</p></div>)}
+          <section id="example" aria-labelledby="example-title" className="border-y border-line py-14 md:py-20">
+            <div className="mb-8 max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('exampleEyebrow')}</p>
+              <h2 id="example-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('exampleTitle')}</h2>
+              <p className="mt-4 text-ink-soft">{t('exampleIntro')}</p>
             </div>
+            <ol className="grid gap-3 md:grid-cols-3">
+              {['exampleParent', 'exampleSpecialist', 'exampleControl'].map((key, index) => (
+                <li key={key} className={`min-h-48 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
+                  <p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-accent-ink'}`}>0{index + 1}</p>
+                  <p className="mt-8 font-semibold">{t(`${key}Title`)}</p>
+                  <p className={`mt-2 text-sm leading-relaxed ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${key}Text`)}</p>
+                </li>
+              ))}
+            </ol>
           </section>
         </Reveal>
 
