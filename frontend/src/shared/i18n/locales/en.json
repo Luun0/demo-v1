@@ -155,6 +155,11 @@
   "dashboard": {
     "title": "Overview",
     "greeting": "Hello, {{name}}",
+    "subtitle": {
+      "parent": "Child profiles, schedules, and support-team observations in one place.",
+      "specialist": "Your assigned children and their support workspace are here.",
+      "admin": "Manage accounts and assignments. Administrators cannot read diary text."
+    },
     "children": "Children",
     "noChildren": "No children yet.",
     "noChildrenSpecialist": "You have no active assignments.",
