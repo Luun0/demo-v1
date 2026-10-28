@@ -18,8 +18,13 @@ export function Loading({ label }: { label?: string }) {
 export function EmptyState({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-dashed border-line bg-surface px-6 py-10 text-center text-ink-soft shadow-soft sm:px-10">
-      <span className="pointer-events-none absolute -right-8 -top-10 size-36 rounded-full bg-brand/5" aria-hidden="true" />
-      <span className="relative mx-auto mb-4 block size-3 rounded-full bg-accent before:absolute before:-inset-2 before:rounded-full before:border before:border-accent/30" aria-hidden="true" />
+      <svg className="relative mx-auto mb-4 size-16" viewBox="0 0 80 80" aria-hidden="true" focusable="false">
+        <circle cx="40" cy="40" r="36" fill="var(--color-brand)" opacity=".07" />
+        <path d="M23 28c4 10 11 15 17 15s13-5 17-15M30 53c4-7 7-10 10-10s6 3 10 10" fill="none" stroke="var(--color-brand)" strokeLinecap="round" strokeWidth="3" />
+        <circle cx="23" cy="27" r="8" fill="var(--color-brand)" />
+        <circle cx="57" cy="27" r="8" fill="var(--color-brand-strong)" />
+        <circle cx="40" cy="54" r="6" fill="var(--color-accent)" />
+      </svg>
       <div className="relative mx-auto max-w-xl text-ink">{children}</div>
       {action && <div className="relative mt-5">{action}</div>}
     </div>
@@ -55,7 +60,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   return (
     <div className="page-enter mb-9 flex flex-wrap items-end justify-between gap-4 border-b chapter-rule pb-6">
       <div>
-        <h1 className="max-w-4xl text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-4xl lg:text-[2.75rem]">{title}</h1>
+        <h1 className="page-title max-w-4xl text-3xl font-normal tracking-[-0.04em] text-ink sm:text-4xl lg:text-[2.75rem]">{title}</h1>
         {subtitle && <p className="mt-2 max-w-2xl text-base text-ink-soft">{subtitle}</p>}
       </div>
       {actions}
