@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitch } from '@/features/language-switch'
 import { ThemeSwitch } from '@/features/theme-switch'
-import { Logo } from '@/shared/ui'
+import { Logo, PrototypeNotice } from '@/shared/ui'
 
 export function AuthLayout({ title, children }: { title: string; children: ReactNode }) {
   const { t } = useTranslation()
@@ -22,6 +22,7 @@ export function AuthLayout({ title, children }: { title: string; children: React
       </section>
       <div className="flex min-h-dvh flex-col px-4 py-6 sm:px-8 md:px-10 lg:px-16">
         <header className="mb-6 flex items-center justify-between md:justify-end"><Link to="/" className="md:hidden"><Logo /></Link><div className="flex items-center gap-3"><ThemeSwitch /><LanguageSwitch /></div></header>
+        <PrototypeNotice className="mb-5" />
         <main id="main" className="page-enter my-auto w-full self-center rounded-[1.25rem] border border-line bg-surface p-6 shadow-soft sm:p-9 lg:max-w-xl">
           <h2 className="mb-6 text-2xl font-semibold">{title}</h2>
           {children}

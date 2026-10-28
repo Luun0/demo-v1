@@ -6,7 +6,7 @@ import { LogoutButton } from '@/features/auth-logout'
 import { LanguageSwitch } from '@/features/language-switch'
 import { ThemeSwitch } from '@/features/theme-switch'
 import { childNav, mainNav } from '@/shared/config/nav'
-import { Icon, Logo, type IconName } from '@/shared/ui'
+import { Icon, Logo, PrototypeNotice, type IconName } from '@/shared/ui'
 import { MobileDrawer } from './MobileDrawer'
 
 const navIcons: Record<string, IconName> = {
@@ -65,6 +65,7 @@ export function AppShell() {
           </div>
         </header>
         <main id="main" tabIndex={-1} className="page-enter mx-auto min-w-0 max-w-7xl px-4 py-7 pb-24 md:px-8 md:py-10 md:pb-10">
+          <PrototypeNotice className="mb-7" />
           <Outlet />
         </main>
       </div>

@@ -22,8 +22,9 @@ export function RegisterForm() {
   const { t } = useTranslation('auth')
   const [done, setDone] = useState<Values['role'] | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const { register, handleSubmit, formState, setError: setFieldError } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { role: 'parent' } })
+  const { register, handleSubmit, watch, formState, setError: setFieldError } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { role: 'parent' } })
   const fe = formState.errors
+  const role = watch('role')
 
   const onSubmit = handleSubmit(async (v) => {
     setError(null)
@@ -55,6 +56,7 @@ export function RegisterForm() {
         <option value="parent">{t('common:roles.parent')}</option>
         <option value="specialist">{t('common:roles.specialist')}</option>
       </Select>
+      {role === 'specialist' && <p className="mb-4 -mt-2 rounded-lg bg-muted p-3 text-sm text-ink-soft">{t('registrationRoleHelp')}</p>}
       <Button type="submit" busy={formState.isSubmitting} className="w-full">{t('submitRegister')}</Button>
     </form>
   )

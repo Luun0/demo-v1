@@ -1,6 +1,6 @@
 # UX Scenarios and Prototype
 
-This document records the UX scenarios and review criteria. The consent control and withdrawal behavior are illustrative prototype interactions only; the lawful basis, guardian authority, consent wording, retention, and withdrawal workflow remain subject to supervisor/legal review. Do not treat the demo as evidence of valid consent. The clickable prototype is in [`/frontend`](../frontend). From the repository root, run `cd frontend`, `npm ci`, then `npm run dev`. Screenshot capture is deferred; no hosted demo is available yet.
+This document records the UX scenarios and review criteria. The consent control and withdrawal behavior are illustrative prototype interactions only; the lawful basis, guardian authority, consent wording, retention, and withdrawal workflow remain subject to supervisor/legal review. Do not treat the demo as evidence of valid consent. The public evaluation preview is [sen-support-platform.onrender.com](https://sen-support-platform.onrender.com/); use fictional data only. The clickable source is in [`/frontend`](../frontend). From the repository root, run `cd frontend`, `npm ci`, then `npm run dev`. No usability study or mobile usability result is claimed.
 
 ## Personas (working hypotheses; validate with participants)
 

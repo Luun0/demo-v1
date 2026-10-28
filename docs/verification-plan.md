@@ -137,7 +137,7 @@ Measured with synthetic data on the development box and isolated containers. The
 
 The naive baseline comparison (section 5) and the usability test with 5 users (SF-08) are not part of this run and remain open.
 
-At the time of this 25 October run, the API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, password reset, audit-role restrictions, and frontend-on-API were implemented. Field-level encryption, Trivy/ZAP execution, legal review, and usability testing were still open then. In local Compose mode only, reset links are written to API logs; keep that flag off for deployments with real accounts until a mail provider is configured.
+At the time of this 25 October run, the API, PostgreSQL integration, role and relationship authorization, diary visibility, audit trail, diary-entry deletion, retention command, password-reset token flow, audit-role restrictions, and frontend-on-API were implemented. Field-level encryption, legal review, and usability testing were still open then. Password-reset email delivery is not configured; local Compose mode can write reset links to API logs only when explicitly enabled, and this must not be enabled for a public deployment.
 
 ## 12. Follow-up verification (26 October 2026, SSP-61)
 
