@@ -4,6 +4,7 @@ import { expectAccessible, login, preferEnglish } from './helpers'
 test('guest: landing and login are accessible; /app redirects to login', async ({ page }) => {
   await preferEnglish(page)
   await page.goto('/')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('Support — together')
   await expectAccessible(page)
   await page.emulateMedia({ colorScheme: 'dark' })
   await expectAccessible(page)

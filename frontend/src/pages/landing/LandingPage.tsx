@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { LanguageSwitch } from '@/features/language-switch'
@@ -9,6 +9,13 @@ const features = ['f1', 'f2', 'f3'] as const
 const roles = ['parent', 'specialist', 'admin'] as const
 const steps = ['step1', 'step2', 'step3'] as const
 type ProgressStyle = CSSProperties & { '--progress': number }
+
+function trackGlow(event: ReactPointerEvent<HTMLElement>) {
+  if (event.pointerType !== 'mouse') return
+  const bounds = event.currentTarget.getBoundingClientRect()
+  event.currentTarget.style.setProperty('--mx', `${event.clientX - bounds.left}px`)
+  event.currentTarget.style.setProperty('--my', `${event.clientY - bounds.top}px`)
+}
 
 function IntroLoader() {
   const [visible, setVisible] = useState(false)
@@ -69,31 +76,33 @@ export function LandingPage() {
   const title = t('title')
   const titleLines = title.split(/\s+—\s+/)
   return (
-    <div className="min-h-dvh overflow-hidden bg-canvas text-ink">
+    <div className="landing-page min-h-dvh overflow-hidden bg-canvas text-ink">
       <IntroLoader />
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:p-3">{t('common:skipToContent')}</a>
-      <header className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-5 py-5 md:px-10">
-        <Logo />
-        <nav aria-label={t('common:nav:main')} className="hidden items-center gap-5 md:flex">
-          <a href="#for-people" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPeople')}</a>
-          <a href="#how-it-works" className="font-medium text-ink-soft hover:text-brand-ink">{t('navWorkflow')}</a>
-          <a href="#privacy" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPrivacy')}</a>
-          <ThemeSwitch />
-          <LanguageSwitch />
-          <Link to="/login" className="rounded-lg px-3 py-2 font-medium text-brand-ink transition-[background-color] hover:bg-brand/10 focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none">{t('ctaLogin')}</Link>
-          <Link to="/register" className="inline-flex min-h-11 items-center rounded-lg bg-accent px-4 font-semibold text-on-accent shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none motion-reduce:transform-none">{t('ctaRegister')}</Link>
-        </nav>
-        <details className="group relative md:hidden">
-          <summary aria-label={t('common:menu')} className="grid min-h-11 min-w-11 cursor-pointer list-none place-items-center rounded-xl border border-line bg-surface text-brand-ink focus-visible:ring-2 focus-visible:ring-accent"><Icon name="menu" /></summary>
-          <div className="absolute right-0 top-14 z-40 grid min-w-64 gap-4 rounded-2xl border border-line bg-surface p-4 shadow-panel">
-            <a href="#for-people" className="min-h-11 py-2 font-medium text-ink">{t('navPeople')}</a>
-            <a href="#how-it-works" className="min-h-11 py-2 font-medium text-ink">{t('navWorkflow')}</a>
-            <a href="#privacy" className="min-h-11 py-2 font-medium text-ink">{t('navPrivacy')}</a>
-            <div className="flex items-center justify-between gap-3 border-t border-line pt-3"><ThemeSwitch /><LanguageSwitch /></div>
-            <Link to="/login" className="min-h-11 py-2 font-medium text-brand-ink">{t('ctaLogin')}</Link>
-            <Link to="/register" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-4 font-semibold text-on-accent">{t('ctaRegister')}</Link>
-          </div>
-        </details>
+      <header className="landing-header sticky top-0 z-30 border-b border-line/60">
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-5 py-4 md:px-10">
+          <Logo />
+          <nav aria-label={t('common:nav:main')} className="hidden items-center gap-5 md:flex">
+            <a href="#for-people" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPeople')}</a>
+            <a href="#how-it-works" className="font-medium text-ink-soft hover:text-brand-ink">{t('navWorkflow')}</a>
+            <a href="#privacy" className="font-medium text-ink-soft hover:text-brand-ink">{t('navPrivacy')}</a>
+            <ThemeSwitch />
+            <LanguageSwitch />
+            <Link to="/login" className="rounded-lg px-3 py-2 font-medium text-brand-ink transition-[background-color] hover:bg-brand/10 focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none">{t('ctaLogin')}</Link>
+            <Link to="/register" className="inline-flex min-h-11 items-center rounded-lg bg-accent px-4 font-semibold text-on-accent shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none motion-reduce:transform-none">{t('ctaRegister')}</Link>
+          </nav>
+          <details className="group relative md:hidden">
+            <summary aria-label={t('common:menu')} className="grid min-h-11 min-w-11 cursor-pointer list-none place-items-center rounded-xl border border-line bg-surface text-brand-ink focus-visible:ring-2 focus-visible:ring-accent"><Icon name="menu" /></summary>
+            <div className="absolute right-0 top-14 z-40 grid min-w-64 gap-4 rounded-2xl border border-line bg-surface p-4 shadow-panel">
+              <a href="#for-people" className="min-h-11 py-2 font-medium text-ink">{t('navPeople')}</a>
+              <a href="#how-it-works" className="min-h-11 py-2 font-medium text-ink">{t('navWorkflow')}</a>
+              <a href="#privacy" className="min-h-11 py-2 font-medium text-ink">{t('navPrivacy')}</a>
+              <div className="flex items-center justify-between gap-3 border-t border-line pt-3"><ThemeSwitch /><LanguageSwitch /></div>
+              <Link to="/login" className="min-h-11 py-2 font-medium text-brand-ink">{t('ctaLogin')}</Link>
+              <Link to="/register" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-4 font-semibold text-on-accent">{t('ctaRegister')}</Link>
+            </div>
+          </details>
+        </div>
       </header>
 
       <div className="mx-auto max-w-[90rem] px-5 md:px-10">
@@ -102,13 +111,14 @@ export function LandingPage() {
 
       <main id="main" className="mx-auto max-w-[90rem] px-5 pb-16 md:px-10">
         <section className="relative grid min-h-[min(76vh,54rem)] items-center gap-9 border-b chapter-rule py-10 md:grid-cols-[1.05fr_.95fr] md:py-14">
+          <span aria-hidden="true" className="aurora"><span className="aurora-noise block size-full" /></span>
           <span aria-hidden="true" className="landing-watermark pointer-events-none absolute bottom-0 right-0 translate-x-[7%] translate-y-[24%] select-none" />
           <div className="relative z-10">
             <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-brand-ink"><span className="size-2 rounded-full bg-accent" />{t('eyebrow')}</p>
-            <h1 aria-label={title} className="mt-7 max-w-3xl text-[clamp(2.65rem,5vw,4.8rem)] font-semibold leading-[1.02] tracking-[-0.06em] text-ink"><span className="sr-only">{title}</span><span aria-hidden="true">{titleLines.map((line, index) => <span key={line} className="block animate-[page-enter_600ms_var(--ease-out-soft)_both]" style={{ animationDelay: `${index * 90}ms` }}>{line}</span>)}</span></h1>
+            <h1 aria-label={title} className="relative mt-7 max-w-3xl font-display text-[clamp(3.2rem,6.3vw,5.6rem)] font-normal leading-[.98] tracking-[-0.04em] text-ink"><span className="sr-only">{title}</span><span aria-hidden="true">{titleLines.map((line, index) => <span key={line} className="block animate-[page-enter_600ms_var(--ease-out-soft)_both]" style={{ animationDelay: `${index * 90}ms` }}>{line}</span>)}</span></h1>
             <WordReveal text={t('text')} />
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link to="/register" className="group inline-flex min-h-12 items-center gap-3 rounded-lg bg-accent px-5 font-semibold text-on-accent shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-lift active:translate-y-px active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none">{t('ctaRegister')}<Icon name="arrow" className="size-5 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none" /></Link>
+              <Link to="/register" className="brand-action group inline-flex min-h-12 items-center gap-3 rounded-lg px-5 font-semibold shadow-soft transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-lift active:translate-y-px active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 motion-reduce:transform-none motion-reduce:transition-none">{t('ctaRegister')}<Icon name="arrow" className="size-5 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none" /></Link>
               <a href="#example" className="inline-flex min-h-12 items-center rounded-lg border border-line bg-surface px-4 font-semibold text-brand-ink transition-[transform,box-shadow] duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-soft focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transform-none motion-reduce:transition-none">{t('ctaExample')}</a>
               <span className="text-sm text-ink-soft">{t('common:demoNotice')}</span>
             </div>
@@ -135,7 +145,7 @@ export function LandingPage() {
           <section id="for-people" aria-labelledby="for-people-title">
             <div className="mb-8 max-w-2xl"><p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('rolesEyebrow')}</p><h2 id="for-people-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('rolesTitle')}</h2></div>
             <div className="grid gap-3 md:grid-cols-3">
-              {roles.map((role, index) => <article key={role} className={`surface-lift min-h-52 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}><p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</p><h3 className="mt-8 text-xl font-semibold">{t(`${role}Title`)}</h3><p className={`mt-2 ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${role}Text`)}</p></article>)}
+              {roles.map((role, index) => <article key={role} onPointerMove={trackGlow} className={`glow-card surface-lift min-h-52 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}><p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</p><h3 className="mt-8 text-xl font-semibold">{t(`${role}Title`)}</h3><p className={`mt-2 ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${role}Text`)}</p></article>)}
             </div>
           </section>
         </Reveal>
@@ -146,7 +156,7 @@ export function LandingPage() {
             <p className="max-w-sm text-ink-soft">{t('whyText')}</p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
-            {features.map((key, index) => <article key={key} className={`surface-lift group relative min-h-64 overflow-hidden border border-line p-6 md:p-7 ${index === 0 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
+            {features.map((key, index) => <article key={key} onPointerMove={trackGlow} className={`glow-card surface-lift group relative min-h-64 overflow-hidden border border-line p-6 md:p-7 ${index === 0 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
               <div className="flex items-start justify-between"><span className={`text-sm font-semibold ${index === 0 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</span><span className={`grid size-9 place-items-center rounded-full transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none ${index === 0 ? 'bg-panel-ink/10 text-panel-ink' : 'bg-muted text-brand-ink'}`}><Icon name="arrow" className="size-4 -rotate-45" /></span></div>
               <h3 className="mt-14 text-2xl font-semibold tracking-tight">{t(`${key}t`)}</h3>
               <p className={`mt-3 max-w-sm ${index === 0 ? 'text-panel-ink/75' : 'text-ink-soft'}`}>{t(`${key}d`)}</p>
