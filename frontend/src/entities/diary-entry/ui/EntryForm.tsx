@@ -27,10 +27,11 @@ interface Props {
 /** Parents never get a visibility choice: their entries are always shared. */
 export function EntryForm({ defaults, canChooseVisibility, busy, onSubmit }: Props) {
   const { t } = useTranslation('diary')
-  const { register, handleSubmit, formState } = useForm<EntryValues>({
+  const { register, handleSubmit, setValue, watch, formState } = useForm<EntryValues>({
     resolver: zodResolver(entrySchema),
     defaultValues: { type: 'observation', visibility: 'shared', observed_at: toLocalInput(new Date()), content: '', ...defaults },
   })
+  const contentIsEmpty = !watch('content')?.trim()
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Select label={t('type')} {...register('type')}>
@@ -45,6 +46,19 @@ export function EntryForm({ defaults, canChooseVisibility, busy, onSubmit }: Pro
         <p className="mb-4 text-sm text-ink-soft">{t('parentShared')}</p>
       )}
       <Input label={t('observedAt')} type="datetime-local" error={formState.errors.observed_at && t('common:required')} {...register('observed_at')} />
+      {canChooseVisibility && !defaults?.content && (
+        <fieldset className="mb-4">
+          <legend className="mb-2 text-sm font-medium text-ink">{t('templates.title')}</legend>
+          <div className="flex flex-wrap gap-2">
+            {(['observation', 'progress', 'recommendation'] as const).map((template) => (
+              <Button key={template} type="button" variant="secondary" disabled={!contentIsEmpty} onClick={() => {
+                setValue('type', template, { shouldDirty: true })
+                setValue('content', t(`templates.${template}.content`), { shouldDirty: true, shouldValidate: true })
+              }}>{t(`templates.${template}.label`)}</Button>
+            ))}
+          </div>
+        </fieldset>
+      )}
       <Textarea label={t('content')} maxLength={10000} error={formState.errors.content && t('common:required')} {...register('content')} />
       <Button type="submit" busy={busy}>{t('common:save')}</Button>
     </form>

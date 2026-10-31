@@ -97,6 +97,33 @@ test('foreign child id is indistinguishable from missing (404 UI) @idor', async 
   await expect(page.getByRole('main')).not.toContainText('Mira')
 })
 
+test('mobile guest: support help works in dark mode without overflow @mobile', async ({ page }) => {
+  await preferEnglish(page)
+  await page.goto('/')
+  await expectAccessible(page)
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await expectAccessible(page)
+
+  await page.getByRole('button', { name: 'Help' }).click()
+  await expect(page.getByRole('region', { name: 'SEN Support help' })).toBeVisible()
+  await expectAccessible(page)
+  await page.getByRole('textbox', { name: 'Your question' }).fill('Who can see the diary?')
+  await page.getByRole('button', { name: 'Send question' }).click()
+  await expect(page.getByRole('log')).toContainText('Platform administrators cannot see it.')
+  await expectAccessible(page)
+
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  const layout = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth,
+    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    panelAnimation: getComputedStyle(document.querySelector('#support-chat-panel')!).animationDuration,
+  }))
+  expect(layout.content).toBeLessThanOrEqual(layout.viewport)
+  expect(layout.reducedMotion).toBe(true)
+  expect(Number.parseFloat(layout.panelAnimation)).toBeLessThan(0.001)
+})
+
 test('mobile: drawer opens, traps focus and closes on Escape @mobile', async ({ page }) => {
   await login(page, 'parent1@example.test')
   const open = page.getByRole('button', { name: 'More' })
