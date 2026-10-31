@@ -7,6 +7,12 @@ import { Icon, Logo, PrototypeNotice } from '@/shared/ui'
 
 const features = ['f1', 'f2', 'f3'] as const
 const roles = ['parent', 'specialist', 'admin'] as const
+const roleIcons = { parent: 'calendar', specialist: 'diary', admin: 'shield' } as const
+const roleCardLayouts = {
+  parent: 'lg:col-span-4 lg:min-h-64',
+  specialist: 'lg:col-start-5 lg:col-span-3 lg:mt-12 lg:min-h-72',
+  admin: 'lg:col-start-8 lg:col-span-5 lg:mt-5 lg:min-h-60',
+} as const
 const steps = ['step1', 'step2', 'step3'] as const
 type ProgressStyle = CSSProperties & { '--progress': number }
 
@@ -150,17 +156,32 @@ export function LandingPage() {
               <span className="text-sm text-ink-soft">{t('common:demoNotice')}</span>
             </div>
           </div>
-          <div className="relative z-10 md:pl-5">
-            <InterfacePreview />
-            <span aria-hidden="true" className="absolute -bottom-5 -left-5 -z-10 size-24 border border-brand/30" />
-          </div>
+          <figure className="relative z-10 aspect-[1.55] overflow-hidden rounded-[1.75rem] border border-line bg-muted shadow-soft md:ml-5 md:self-center">
+            <img src="/landing-care-collage.jpg" alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 size-full object-cover object-[72%_center]" />
+            <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink-panel/35 via-transparent to-transparent dark:bg-ink-panel/45 dark:from-ink-panel/65" />
+            <figcaption className="sr-only">{t('previewLabel')}</figcaption>
+          </figure>
         </section>
 
         <Reveal className="py-14 md:py-20">
           <section id="for-people" aria-labelledby="for-people-title">
             <div className="mb-8 max-w-2xl"><p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('rolesEyebrow')}</p><h2 id="for-people-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('rolesTitle')}</h2></div>
-            <div className="grid gap-3 md:grid-cols-3">
-              {roles.map((role, index) => <article key={role} onPointerMove={trackGlow} className={`glow-card surface-lift min-h-52 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}><p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</p><h3 className="mt-8 text-xl font-semibold">{t(`${role}Title`)}</h3><p className={`mt-2 ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${role}Text`)}</p></article>)}
+            <div className="relative grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:items-start">
+              <svg aria-hidden="true" viewBox="0 0 1000 240" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 top-0 hidden h-60 w-full lg:block">
+                <path d="M36 45 C188 8 252 182 405 143 S654 36 786 106 S921 171 974 115" fill="none" stroke="var(--color-accent)" strokeDasharray="3 9" strokeLinecap="round" strokeWidth="2" opacity=".58" />
+              </svg>
+              {roles.map((role, index) => {
+                return (
+                  <article key={role} className={`surface-lift landing-role-cutout landing-role-cutout--${role} relative z-10 min-h-52 border border-line bg-surface p-6 text-ink md:p-7 ${roleCardLayouts[role]}`}>
+                    <div className="flex items-start justify-between">
+                      <p aria-hidden="true" className="font-display text-5xl leading-none text-accent-ink/65">0{index + 1}</p>
+                      {role === 'parent' ? <svg aria-hidden="true" viewBox="0 0 56 44" className="size-14"><path d="M5 27 Q28 3 51 27" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" /><g fill="var(--color-brand-strong)" stroke="var(--color-brand-strong)" strokeLinecap="round" strokeWidth="2.5"><circle cx="14" cy="15" r="4" /><path d="M14 21v14m-5-8 5-4 5 4" fill="none" /><circle cx="28" cy="18" r="3" /><path d="M28 23v12" fill="none" /><circle cx="42" cy="15" r="4" /><path d="M42 21v14m-5-8 5-4 5 4" fill="none" /></g></svg> : <span className="grid size-10 place-items-center rounded-full bg-muted text-brand-ink"><Icon name={roleIcons[role]} /></span>}
+                    </div>
+                    <h3 className="mt-6 text-xl font-semibold">{t(`${role}Title`)}</h3>
+                    <p className="mt-2 max-w-sm text-ink-soft">{t(`${role}Text`)}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
         </Reveal>
@@ -170,8 +191,11 @@ export function LandingPage() {
             <h2 className="max-w-xl text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('workspaceTitle')}</h2>
             <p className="max-w-sm text-ink-soft">{t('whyText')}</p>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            {features.map((key, index) => <article key={key} onPointerMove={trackGlow} className={`glow-card surface-lift group relative min-h-64 overflow-hidden border border-line p-6 md:p-7 ${index === 0 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
+          <figure className="family-panorama mb-10 overflow-hidden">
+            <img src="/family-mountain-picnic.jpg" alt={t('picnicAlt')} className="block aspect-[3.8/1] max-h-[30rem] min-h-44 w-full object-cover object-center" loading="lazy" />
+          </figure>
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((key, index) => <article key={key} onPointerMove={trackGlow} className={`glow-card surface-lift landing-feature-cutout landing-feature-cutout--${index + 1} group relative min-h-64 overflow-hidden border border-line p-6 md:p-7 ${index === 0 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
               <div className="flex items-start justify-between"><span className={`text-sm font-semibold ${index === 0 ? 'text-lagoon' : 'text-brand-ink'}`}>0{index + 1}</span><span className={`grid size-9 place-items-center rounded-full transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none ${index === 0 ? 'bg-panel-ink/10 text-panel-ink' : 'bg-muted text-brand-ink'}`}><Icon name="arrow" className="size-4 -rotate-45" /></span></div>
               <h3 className="mt-14 text-2xl font-semibold tracking-tight">{t(`${key}t`)}</h3>
               <p className={`mt-3 max-w-sm ${index === 0 ? 'text-panel-ink/75' : 'text-ink-soft'}`}>{t(`${key}d`)}</p>
@@ -181,17 +205,47 @@ export function LandingPage() {
 
         <Reveal>
           <section id="example" aria-labelledby="example-title" className="border-y border-line py-14 md:py-20">
-            <div className="mb-8 max-w-2xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('exampleEyebrow')}</p>
-              <h2 id="example-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('exampleTitle')}</h2>
-              <p className="mt-4 text-ink-soft">{t('exampleIntro')}</p>
+            <div className="mb-8 grid items-center gap-7 md:grid-cols-[.8fr_1.2fr]">
+              <div className="max-w-2xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">{t('exampleEyebrow')}</p>
+                <h2 id="example-title" className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-5xl">{t('exampleTitle')}</h2>
+                <p className="mt-4 text-ink-soft">{t('exampleIntro')}</p>
+              </div>
+              <InterfacePreview />
             </div>
-            <ol className="grid gap-3 md:grid-cols-3">
+            <ol className="relative grid gap-8 pt-8 md:grid-cols-3 md:gap-0 md:pt-48">
+              <svg aria-hidden="true" viewBox="0 0 1200 190" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 top-0 hidden h-48 w-full md:block">
+                <g fill="var(--color-canvas)" stroke="var(--color-brand-strong)" strokeLinejoin="round" strokeWidth="2.5">
+                  <path d="M34 72 73 40l39 32v35H34Z" /><path d="M28 73 73 34l45 39" fill="none" stroke="var(--color-accent)" strokeWidth="4" />
+                  <path d="M66 82h14v25H66z" /><path d="M43 77h12v12H43zM91 77h12v12H91z" />
+                  <path d="M363 145h22v22h-22zM385 153h20v14h-20z" fill="var(--color-accent)" />
+                  <circle cx="433" cy="157" r="11" fill="var(--color-muted)" />
+                  <path d="M1048 29v61m-29-40h58m-48 0-9 32m19-32v32m19-32 9 32" fill="none" />
+                  <path d="M1019 49q29-34 58 0Z" fill="var(--color-accent)" />
+                  <path d="M1139 70c-12-13 5-31 17-18 12-13 29 5 17 18l-17 17z" fill="var(--color-accent)" />
+                  <path d="m1156 86-8 20" fill="none" />
+                </g>
+                <path d="M12 112 C150 112 150 24 292 24 S430 112 572 112 S710 24 852 24 S990 112 1188 112" fill="none" stroke="var(--color-brand-strong)" strokeWidth="3" />
+                <path d="M12 120 C150 120 150 32 292 32 S430 120 572 120 S710 32 852 32 S990 120 1188 120" fill="none" stroke="var(--color-accent)" strokeWidth="3" />
+                <g fill="var(--color-accent)">
+                  <circle cx="95" cy="111" r="3" /><circle cx="170" cy="87" r="3" /><circle cx="215" cy="53" r="3" />
+                  <circle cx="369" cy="51" r="3" /><circle cx="425" cy="87" r="3" /><circle cx="500" cy="111" r="3" />
+                  <circle cx="644" cy="87" r="3" /><circle cx="700" cy="51" r="3" /><circle cx="778" cy="27" r="3" />
+                  <circle cx="922" cy="52" r="3" /><circle cx="980" cy="88" r="3" /><circle cx="1060" cy="112" r="3" />
+                </g>
+                <g transform="translate(530 73) rotate(8 42 22)" stroke="var(--color-brand)" strokeWidth="3">
+                  <g fill="var(--color-canvas)"><circle cx="29" cy="5" r="6" /><circle cx="53" cy="5" r="6" /></g>
+                  <path d="M19 19 Q19 10 29 10 Q39 10 39 19 M43 19 Q43 10 53 10 Q63 10 63 19" fill="var(--color-brand-strong)" />
+                  <path d="M5 19 H78 L74 30 H12 Z" fill="var(--color-accent)" />
+                  <circle cx="23" cy="34" r="7" fill="var(--color-canvas)" />
+                  <circle cx="67" cy="34" r="7" fill="var(--color-canvas)" />
+                </g>
+              </svg>
               {['exampleParent', 'exampleSpecialist', 'exampleControl'].map((key, index) => (
-                <li key={key} className={`min-h-48 border border-line p-6 ${index === 1 ? 'bg-ink-panel text-panel-ink' : 'bg-surface text-ink'}`}>
-                  <p className={`text-sm font-semibold uppercase tracking-[0.12em] ${index === 1 ? 'text-lagoon' : 'text-accent-ink'}`}>0{index + 1}</p>
-                  <p className="mt-8 font-semibold">{t(`${key}Title`)}</p>
-                  <p className={`mt-2 text-sm leading-relaxed ${index === 1 ? 'text-panel-ink/80' : 'text-ink-soft'}`}>{t(`${key}Text`)}</p>
+                <li key={key} className={`relative border-l border-accent/55 pl-5 md:border-l-0 md:px-6 md:pl-6 ${index === 1 ? 'md:translate-y-10' : index === 2 ? 'md:translate-y-2' : ''}`}>
+                  <p className="font-display text-4xl leading-none text-accent-ink/80">0{index + 1}</p>
+                  <p className="mt-5 max-w-xs text-lg font-semibold leading-snug">{t(`${key}Title`)}</p>
+                  <p className="mt-3 max-w-sm leading-relaxed text-ink-soft">{t(`${key}Text`)}</p>
                 </li>
               ))}
             </ol>

@@ -113,6 +113,20 @@ tbody tr:hover { background: color-mix(in srgb, var(--color-brand) 6%, var(--col
 @keyframes aurora-drift { from { transform: translate3d(-2%, 0, 0) scale(.96); } to { transform: translate3d(3%, 2%, 0) scale(1.04); } }
 .brand-action { border: 2px solid transparent; background: linear-gradient(var(--color-brand-strong), var(--color-brand-strong)) padding-box, linear-gradient(120deg, var(--color-brand-strong), var(--color-accent)) border-box; color: var(--color-on-brand); }
 .glow-card { isolation: isolate; }
+.family-panorama { clip-path: polygon(1.1% 0, 97.8% 1.4%, 100% 11%, 98.8% 91%, 95.2% 100%, 2.7% 97.8%, 0 86%, .8% 13%); }
+.landing-role-cutout--parent { border-radius: 2.8rem 1.1rem 2.2rem .85rem; }
+.landing-role-cutout--specialist { border-radius: 1.1rem 2.7rem .9rem 2.35rem; }
+.landing-role-cutout--admin { border-radius: 2.4rem .9rem 3rem 1.2rem; }
+.landing-feature-cutout--1 { border-radius: 2.8rem 1rem 2rem 1.1rem; }
+.landing-feature-cutout--2 { border-radius: 1rem 2.7rem 1rem 2.35rem; }
+.landing-feature-cutout--3 { border-radius: 2.3rem 1rem 2.8rem .9rem; }
+@media (min-width: 1024px) {
+  .landing-feature-cutout--2 { margin-top: 1.4rem; }
+  .landing-feature-cutout--3 { margin-top: .55rem; }
+}
+@media (max-width: 767px) {
+  .family-panorama { clip-path: polygon(2% 0, 98% 1%, 100% 10%, 98% 95%, 95% 100%, 2% 98%, 0 88%); }
+}
 .glow-card::before { position: absolute; z-index: -1; inset: 0; content: ''; opacity: 0; background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 68%); transition: opacity 200ms var(--ease-out-soft); pointer-events: none; }
 @media (hover: hover) and (pointer: fine) { .glow-card:hover::before { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .aurora::before { animation: none; } .glow-card::before { transition: none; } }

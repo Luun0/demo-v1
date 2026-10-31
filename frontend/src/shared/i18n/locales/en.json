@@ -96,6 +96,7 @@
     "f3t": "Access log",
     "f3d": "Guardians see who accessed their child's records.",
     "workspaceTitle": "A shared workspace with clear roles",
+    "picnicAlt": "Parents share a picnic in the mountains while their child runs across a hill.",
     "statsEyebrow": "The structure",
     "statsTitle": "A child stays at the centre of the plan.",
     "statOneLabel": "connected sides: guardian and assigned specialist",
@@ -177,6 +178,13 @@
     "addChild": "Add child",
     "visibleEntries_one": "{{count}} diary entry",
     "visibleEntries_other": "{{count}} diary entries",
+    "recommendationsTitle": "Recent recommendations",
+    "recommendationsLoading": "Loading recommendations…",
+    "recommendationsError": "Recommendations could not be loaded.",
+    "recommendationsEmpty": "No recommendations appear in the latest entries.",
+    "recommendationsOpen": "All diary entries",
+    "recommendationsMore": "Show older recommendations",
+    "recommendationsLoadingMore": "Loading…",
     "born": "Born {{date}}",
     "open": "Open"
   },
@@ -234,7 +242,13 @@
     "searchPlaceholder": "Search entries",
     "total_one": "{{count}} entry",
     "total_other": "{{count}} entries",
-    "parentShared": "Your entries are always visible to the child's specialists."
+    "parentShared": "Your entries are always visible to the child's specialists.",
+    "templates": {
+      "title": "Start with a prompt",
+      "observation": { "label": "Observation", "content": "Context:\nWhat I noticed:\nWhat helped:" },
+      "progress": { "label": "What went well", "content": "Goal:\nWhat went well:\nNext step:" },
+      "recommendation": { "label": "Family recommendation", "content": "Try at home:\nHow often:\nWhen to review:" }
+    }
   },
   "access": {
     "title": "Access log",
@@ -277,9 +291,9 @@
     "actions": "Actions"
   },
   "supportChat": {
-    "launcher": "FAQ_SEN",
+    "launcher": "Help",
     "close": "Close",
-    "title": "FAQ_SEN",
+    "title": "SEN Support help",
     "subtitle": "Answers about using the platform",
     "welcome": "Hello! I can help you understand SEN Support features.",
     "privacy": "This is a help guide, not an AI advisor. Please do not share personal or medical information.",
